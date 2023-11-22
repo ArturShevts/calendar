@@ -1,5 +1,5 @@
 <div align="center">
-    <img src="https://storage.googleapis.com/public-jobsity-bucket/jobsity_logo_small.png"/>
+    <img src="https://main--elegant-rugelach-0bd4a4.netlify.app/_app/immutable/assets/jobsity-color.f8ccd325.svg"/>
 </div>
 
 # Angular Challenge
