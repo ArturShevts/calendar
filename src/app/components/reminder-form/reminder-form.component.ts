@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Reminder } from 'src/app/interfaces/reminder';
+import { Reminder } from '../../interfaces/reminder';
 
 @Component({
   selector: 'app-reminder-form',

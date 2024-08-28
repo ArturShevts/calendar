@@ -1,9 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { Reminder } from 'src/app/interfaces/reminder';
-import { CalendarService } from 'src/app/services/calendar.service';
-import { WeatherService } from 'src/app/services/weather.service';
+import { Reminder } from '../../interfaces/reminder';
+import { CalendarService } from '../../services/calendar.service';
+import { WeatherService } from '../../services/weather.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ReminderFormComponent } from '../reminder-form/reminder-form.component';
 
@@ -30,7 +30,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
         reminders.map((reminder: Reminder) => {
           return {
             ...reminder,
-            weather: this.getWeather(reminder.city),
+            weather: this.getWeather(reminder?.city ?? ''),
           };
         });
         console.log(reminders);
