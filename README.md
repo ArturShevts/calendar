@@ -1,5 +1,5 @@
 <div align="center">
-    <img src="https://media.licdn.com/dms/image/D4E0BAQETyObSEmZH-A/company-logo_200_200/0/1693956448491/jobsity_llc_logo?e=1723075200&v=beta&t=rGq4fY1cprFyIaSabim0_bgb-QLCbJUk6Es9dXuua1w"/>
+    <img src="https://avatars.githubusercontent.com/u/986545?s=200&v=4" width="200" height="200"/>
 </div>
 
 # Angular Challenge
