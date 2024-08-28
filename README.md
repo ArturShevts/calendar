@@ -1,4 +1,9 @@
-# AngularChallengeUpdated
+# Angular Challenge
+ - **You must create the calendar component yourself**. Do not user calendar libraries like FullCalendar or Bootstrap Calendar.
+ - Provide working API keys to any external API you use.
+ - Show us your capabilities on CSS and styling, if possible.
+ - You will need to **record a video explaining the code** you created, the decisions you made, its functionality, and demonstrating the complete operation of the challenge. _Remember to show the execution from scratch, it should not be running beforehand._
+
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.1.4.
 
