@@ -9,8 +9,11 @@ import {FormControl, FormGroup, Validators} from "@angular/forms";
   styleUrls: ['./reminder-form.component.scss']
 })
 export class ReminderFormComponent implements OnInit {
-  months = ['January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December'];
+  colors = [
+    {name: 'Red', value: 'red'},
+    {name: 'Green', value: 'green'},
+    {name: 'Yellow', value: 'yellow'},
+  ]
   constructor(@Inject(MAT_DIALOG_DATA) public data: { date:Date, reminder: Reminder }) { }
 
   reminderFormGroup?:  FormGroup;
@@ -22,8 +25,7 @@ export class ReminderFormComponent implements OnInit {
     if(reminder) {
       this.reminderFormGroup = new FormGroup({
         text: new FormControl(reminder.text, Validators.required),
-        year: new FormControl(reminder.dateTime.getFullYear() , Validators.required),
-        month: new FormControl(reminder.dateTime.getMonth(), Validators.required),
+            date: new FormControl( reminder.dateTime, Validators.required),
         time: new FormControl(reminder.dateTime),  // Not required for all day events
         city: new FormControl(reminder.city ),
         color: new FormControl(reminder.color, Validators.required),
@@ -31,8 +33,7 @@ export class ReminderFormComponent implements OnInit {
     } else {
       this.reminderFormGroup = new FormGroup({
         text: new FormControl( "", Validators.required),
-        year: new FormControl(  date.getFullYear(), Validators.required),
-        month: new FormControl( date.getMonth(), Validators.required),
+        date: new FormControl( date, Validators.required),
         time: new FormControl( date.getTime()),  // Not required for all day events
         city: new FormControl( '', ),
         color: new FormControl( '', Validators.required),
@@ -43,6 +44,19 @@ export class ReminderFormComponent implements OnInit {
 
 
   onSubmit() {
-    console.log(this.reminderFormGroup?.value)
+
+if (!this.reminderFormGroup) { console.error("Form is not initialized")
+  return;
+}
+let formData = this.reminderFormGroup.value;
+let newReminder:Reminder = {
+  text: formData.text,
+  dateTime:  new Date(formData.date, formData.time),
+  city: formData.city,
+  color: formData.color,
+}
+
+return
   }
+
 }

@@ -3,9 +3,18 @@ import { CommonModule } from '@angular/common';
 import { ReminderFormComponent } from './reminder-form.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import {ReactiveFormsModule} from "@angular/forms";
-import {MatError, MatFormField, MatHint, MatLabel} from "@angular/material/form-field";
-import {MatOption} from "@angular/material/core";
-import {MatSelect} from "@angular/material/select";
+import {MatError, MatFormField, MatFormFieldModule, MatHint, MatLabel} from "@angular/material/form-field";
+import {MatNativeDateModule, MatOption} from "@angular/material/core";
+import {MatSelect, MatSelectModule} from "@angular/material/select";
+import {MatButton, MatButtonModule} from "@angular/material/button";
+import {MatInput, MatInputModule} from "@angular/material/input";
+import {CdkTextareaAutosize} from "@angular/cdk/text-field";
+import {
+  MatDatepicker,
+  MatDatepickerInput,
+  MatDatepickerModule,
+  MatDatepickerToggle
+} from "@angular/material/datepicker";
 
 
 
@@ -16,12 +25,13 @@ import {MatSelect} from "@angular/material/select";
     CommonModule,
     MatDialogModule,
     ReactiveFormsModule,
-    MatFormField,
-    MatOption,
-    MatSelect,
-    MatError,
-    MatLabel,
-    MatHint
-  ]
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    MatSelectModule,
+    MatDatepickerModule,
+    MatNativeDateModule
+  ],
+  providers: [ MatDatepickerModule]
 })
 export class ReminderFormModule { }
