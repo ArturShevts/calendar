@@ -7,6 +7,7 @@ import { SharedModule } from '../../modules/shared/shared.module';
 import { ReminderFormComponent } from '../reminder-form/reminder-form.component';
 import { ReminderFormModule } from '../reminder-form/reminder-form.module';
 import { MatDialogModule } from '@angular/material/dialog';
+import {FormsModule} from "@angular/forms";
 
 
 @NgModule({
@@ -18,6 +19,7 @@ import { MatDialogModule } from '@angular/material/dialog';
     SharedModule,
     ReminderFormModule,
     MatDialogModule,
+    FormsModule,
   ],
 })
 export class CalendarModule { }

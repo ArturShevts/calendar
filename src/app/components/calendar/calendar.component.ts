@@ -1,11 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import {BehaviorSubject, distinctUntilChanged, map, Subject} from 'rxjs';
+import {BehaviorSubject, debounceTime, distinctUntilChanged, map, Subject} from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Reminder } from '../../interfaces/reminder';
 import { CalendarService } from '../../services/calendar.service';
 import { WeatherService } from '../../services/weather.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ReminderFormComponent } from '../reminder-form/reminder-form.component';
+import {FormControl} from "@angular/forms";
 
 
 export interface Day  {
@@ -16,6 +17,20 @@ export interface Day  {
   selected: boolean;
   current: boolean;
 }
+ export const MonthsMap = {
+  0: 'January',
+  1: 'February',
+  2: 'March',
+  3: 'April',
+  4: 'May',
+  5: 'June',
+  6: 'July',
+  7: 'August',
+  8: 'September',
+  9: 'October',
+  10: 'November',
+  11: 'December',
+ }
 
 
 
@@ -27,11 +42,10 @@ export interface Day  {
 export class CalendarComponent implements OnInit, OnDestroy {
   selectedDate = new  BehaviorSubject<Date>(new Date());
   $selectedDate = this.selectedDate.asObservable();
-  $selectedMonth = this.$selectedDate.pipe(
-    map((date) => date.getMonth(),
-      distinctUntilChanged())
-  );
 
+
+  selectedYearControl =  this.selectedDate.getValue().getFullYear()
+  selectedMonthControl =  this.selectedDate.getValue().getMonth()
 
   tempDays: Day[] = [];
   onDestroy$ = new Subject<boolean>();
@@ -44,12 +58,13 @@ export class CalendarComponent implements OnInit, OnDestroy {
 
 
   ngOnInit(): void {
-    this.$selectedDate.subscribe((date) => {
-      console.log(date, "selected Date");
+    this.$selectedDate.pipe(distinctUntilChanged(),
+      debounceTime(300)
+    ).subscribe((date) => {
+      console.log("selected Date : "+date.toDateString());
+      this.fillCalendar(this.selectedDate.value);
     })
-    this.$selectedMonth.subscribe((month) => {
-      console.log(month, "selected Month");
-    })
+
 this.fillCalendar(new Date());
 
     this.calendarService.list(new Date())
@@ -126,13 +141,12 @@ this.tempDays = days
 
 public changeMonth(changeBy: number) {
   this.selectedDate.next(new Date(this.selectedDate.value.getFullYear(), this.selectedDate.value.getMonth() + changeBy, 1));
-  this.fillCalendar(this.selectedDate.value);
 }
 
 
 public changeYear(changeBy:number) {
   this.selectedDate.next(new Date(this.selectedDate.value.getFullYear() + changeBy, this.selectedDate.value.getMonth(), 1));
-  this.fillCalendar(this.selectedDate.value);
 }
 
+  protected readonly MonthsMap = MonthsMap;
 }

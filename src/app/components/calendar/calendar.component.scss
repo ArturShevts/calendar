@@ -2,7 +2,29 @@
   flex: 1 1 auto;
 }
 
+.year-select{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
+   .title-year {
+    font-size: 2.5em;
+     width: 150px;
+     text-align: center;
 
+   }
+}
+.month-select{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
+  .title-month {
+    font-size: 1.5em;
+    width: 150px;
+text-align: center;
+  }
+}
 .calendar {
   display: grid;
   grid-template-rows: auto 1fr;
@@ -33,6 +55,9 @@
     }
     .hidden {
       color: grey;
+    }
+    .weekend{
+      color:blue;
     }
 
   }

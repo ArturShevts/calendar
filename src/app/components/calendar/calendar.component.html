@@ -9,13 +9,30 @@
  </button>
 </mat-toolbar>
 
+
+
+
+
+
 <!-- Create the calendar here -->
 <div class="year-select">
   <button mat-icon-button (click)="changeYear(-1)">
     <mat-icon>keyboard_arrow_left</mat-icon>
   </button>
-  <input type="number" [(ngModel)]="changeMonth()" (change)="changeYear(0)">
+  <div class="title-year">{{($selectedDate|async)?.getFullYear()}}</div>
+
+  <!--  <input type="number" [(ngModel)]="selectedYearControl"   >-->
   <button mat-icon-button (click)="changeYear(1)">
+    <mat-icon>keyboard_arrow_right</mat-icon>
+  </button>
+</div>
+
+<div class="month-select">
+  <button mat-icon-button (click)="changeMonth(-1)">
+    <mat-icon>keyboard_arrow_left</mat-icon>
+  </button>
+  <div class="title-month">{{ ($selectedDate | async)?.toLocaleString('default', { month: 'long' })}}</div><!--  <input type="number" [(ngModel)]="selectedMonthControl" (change)="changeMonth(0)"  >-->
+  <button mat-icon-button (click)="changeMonth(1)">
     <mat-icon>keyboard_arrow_right</mat-icon>
   </button>
 </div>
@@ -23,17 +40,17 @@
 
 <div class="calendar">
   <div class="calendar-header">
+    <div class="calendar-cell">Sun</div>
     <div class="calendar-cell">Mon</div>
     <div class="calendar-cell">Tue</div>
     <div class="calendar-cell">Wed</div>
     <div class="calendar-cell">Thu</div>
     <div class="calendar-cell">Fri</div>
     <div class="calendar-cell">Sat</div>
-    <div class="calendar-cell">Sun</div>
   </div>
   <div class="calendar-body">
-       <div class="calendar-cell" *ngFor="let day of tempDays" (click)="selectDate(day.date)" [class.selected]="day.selected" [class.current] = "day.current">
-        <div class="cell-date"  [class.hidden]="!day.display"  > {{ day.date.getDate() }}</div>
+       <div class="calendar-cell" *ngFor="let day of tempDays" (click)="selectDate(day.date)" [class.selected]="day.selected" [class.current] = "day.current" >
+        <div class="cell-date"  [class.weekend] = "day.date.getDay() === 0 || day.date.getDay() === 6" [class.hidden]="!day.display"  > {{ day.date.getDate() }}</div>
       </div>
   </div>
 </div>
