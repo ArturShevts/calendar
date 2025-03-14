@@ -120,7 +120,7 @@ public fillCalendar(selectedDate:Date) {
     let firstSatOfNextMonth = new Date(selectedDate.getFullYear(), selectedDate.getMonth() + 1, 1);
  let days:Day[] = [];
 for (let i = 0; i < 42; i++) {
-
+   // NOTE: small chance that feb 1st is a Sunday, in which case we only need to display 28 days
    let newDate = new Date(firstDisplayDate.getFullYear(), firstDisplayDate.getMonth(), firstDisplayDate.getDate() + i)
   let newDay: Day = {
     date: newDate,
