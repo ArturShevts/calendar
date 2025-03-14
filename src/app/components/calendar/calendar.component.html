@@ -4,24 +4,16 @@
   </button>
   <span>Jobsity challenge</span>
   <span class="spacer"></span>
-  <button mat-button (click)="openReminderForm()">
-   <mat-icon>add</mat-icon> New reminder
- </button>
+  <button mat-button (click)="openReminderForm(selectedDate.getValue())">
+    <mat-icon>add</mat-icon> New reminder
+  </button>
 </mat-toolbar>
 
-
-
-
-
-
-<!-- Create the calendar here -->
 <div class="year-select">
   <button mat-icon-button (click)="changeYear(-1)">
     <mat-icon>keyboard_arrow_left</mat-icon>
   </button>
-  <div class="title-year">{{($selectedDate|async)?.getFullYear()}}</div>
-
-  <!--  <input type="number" [(ngModel)]="selectedYearControl"   >-->
+  <div class="title-year">{{ ($selectedDate | async)?.getFullYear() }}</div>
   <button mat-icon-button (click)="changeYear(1)">
     <mat-icon>keyboard_arrow_right</mat-icon>
   </button>
@@ -31,12 +23,11 @@
   <button mat-icon-button (click)="changeMonth(-1)">
     <mat-icon>keyboard_arrow_left</mat-icon>
   </button>
-  <div class="title-month">{{ ($selectedDate | async)?.toLocaleString('default', { month: 'long' })}}</div><!--  <input type="number" [(ngModel)]="selectedMonthControl" (change)="changeMonth(0)"  >-->
+  <div class="title-month">{{ ($selectedDate | async)?.toLocaleString('default', { month: 'long' }) }}</div>
   <button mat-icon-button (click)="changeMonth(1)">
     <mat-icon>keyboard_arrow_right</mat-icon>
   </button>
 </div>
-
 
 <div class="calendar">
   <div class="calendar-header">
@@ -49,11 +40,12 @@
     <div class="calendar-cell">Sat</div>
   </div>
   <div class="calendar-body">
-       <div class="calendar-cell" *ngFor="let day of tempDays" (click)="selectDate(day.date)" [class.selected]="day.selected" [class.current] = "day.current" >
-        <div class="cell-date"  [class.weekend] = "day.date.getDay() === 0 || day.date.getDay() === 6" [class.hidden]="!day.display"  > {{ day.date.getDate() }}</div>
+    <div class="calendar-cell" *ngFor="let day of tempDays" (click)="selectDate(day.date)"
+         [class.selected]="day.selected" [class.current]="day.current">
+      <div class="cell-date" [class.weekend]="day.date.getDay() === 0 || day.date.getDay() === 6"
+           [class.hidden]="!day.display">
+        {{ day.date.getDate() }}
       </div>
+    </div>
   </div>
 </div>
-
-
-<!-- ======================== -->

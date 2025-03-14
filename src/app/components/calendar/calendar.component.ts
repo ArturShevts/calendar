@@ -92,9 +92,10 @@ this.fillCalendar(new Date());
     this.onDestroy$.complete();
   }
 
-  openReminderForm(reminder?: Reminder) {
+  openReminderForm(date: Date,reminder?: Reminder) {
     this.matDialog.open(ReminderFormComponent, {
       data: {
+        date,
         reminder,
       },
     });
