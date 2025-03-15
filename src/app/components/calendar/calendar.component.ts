@@ -11,8 +11,12 @@ import {
   combineLatest,
   debounceTime,
   distinctUntilChanged,
+  forkJoin,
   map,
+  mergeMap,
   Observable,
+  share,
+  startWith,
   Subject,
   tap,
 } from 'rxjs';
@@ -54,38 +58,41 @@ export const MonthsMap = {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CalendarComponent implements OnInit {
-  selectedDate = new BehaviorSubject<Date>(new Date());
-  snackBar = inject(MatSnackBar);
-  viewData = new Observable<[Date, Notification, Reminder[]]>();
+  private snackBar = inject(MatSnackBar);
+  private calendarService = inject(CalendarService);
+  private weatherService = inject(WeatherService);
+  private matDialog = inject(MatDialog);
 
-  constructor(
-    private calendarService: CalendarService,
-    private weatherService: WeatherService,
-    private matDialog: MatDialog,
-  ) {}
+  public calenderData: Day[] = [];
+  public selectedDate = new BehaviorSubject<Date>(new Date());
+
+  public $vm: Observable<{
+    selectedDate: Date;
+    notification: Notification;
+    reminders: Reminder[];
+  }> = combineLatest([
+    this.selectedDate.asObservable().pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+      tap((selectedDate: Date) => this.fillCalendar(selectedDate)),
+    ),
+    this.calendarService.$notification.pipe(
+      startWith({ body: '', error: false }),
+    ),
+    this.calendarService.$reminders.pipe(
+      map((reminders) => Array.from(reminders.values())),
+    ),
+  ]).pipe(
+    map(([selectedDate, notifications, reminders]) => ({
+      selectedDate,
+      notification: notifications,
+      reminders,
+    })),
+  );
 
   ngOnInit(): void {
     this.fillCalendar(new Date());
-    this.openNotification();
-
-    this.viewData = combineLatest([
-      this.selectedDate.asObservable().pipe(debounceTime(300)),
-      this.calendarService.$notification,
-      this.calendarService.$reminders.pipe(
-        map((reminders) => Array.from(reminders.values())),
-      ),
-    ]);
-
-    this.calendarService.list(new Date()).pipe(
-      tap((reminders: Reminder[]) =>
-        reminders.map((reminder: Reminder) => {
-          return {
-            ...reminder,
-            weather: this.getWeather(reminder?.city ?? ''),
-          };
-        }),
-      ),
-    );
+    // this.openNotification();
   }
 
   getWeather(city: string) {
@@ -158,8 +165,8 @@ export class CalendarComponent implements OnInit {
 
       days.push(newDay);
     }
+    this.calenderData = days;
     console.log(days);
-    this.tempDays = days;
   }
 
   // year and month select

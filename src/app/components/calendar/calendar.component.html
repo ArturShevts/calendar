@@ -1,10 +1,12 @@
+<div *ngIf="$vm | async as vd">
+
 <mat-toolbar class="app-navbar">
   <button mat-icon-button>
     <mat-icon>menu</mat-icon>
   </button>
   <span>Jobsity challenge</span>
   <span class="spacer"></span>
-  <button mat-button (click)="openReminderForm(selectedDate.getValue())">
+  <button mat-button (click)="openReminderForm(vd.selectedDate)">
     <mat-icon>add</mat-icon> New reminder
   </button>
 </mat-toolbar>
@@ -13,7 +15,7 @@
   <button mat-icon-button (click)="changeYear(-1)">
     <mat-icon>keyboard_arrow_left</mat-icon>
   </button>
-  <div class="title-year">{{ ($selectedDate | async)?.getFullYear() }}</div>
+  <div class="title-year">{{ vd.selectedDate.getFullYear() }}</div>
   <button mat-icon-button (click)="changeYear(1)">
     <mat-icon>keyboard_arrow_right</mat-icon>
   </button>
@@ -23,7 +25,7 @@
   <button mat-icon-button (click)="changeMonth(-1)">
     <mat-icon>keyboard_arrow_left</mat-icon>
   </button>
-  <div class="title-month">{{ ($selectedDate | async)?.toLocaleString('default', { month: 'long' }) }}</div>
+  <div class="title-month">{{ vd.selectedDate.toLocaleString('default', { month: 'long' }) }}</div>
   <button mat-icon-button (click)="changeMonth(1)">
     <mat-icon>keyboard_arrow_right</mat-icon>
   </button>
@@ -40,7 +42,7 @@
     <div class="calendar-cell">Sat</div>
   </div>
   <div class="calendar-body">
-    <div class="calendar-cell" *ngFor="let day of tempDays" (click)="selectDate(day.date)"
+    <div class="calendar-cell" *ngFor="let day of calenderData" (click)="selectDate(day.date)"
          [class.selected]="day.selected" [class.current]="day.current">
       <div class="cell-date" [class.weekend]="day.date.getDay() === 0 || day.date.getDay() === 6"
            [class.hidden]="!day.display">
@@ -48,4 +50,5 @@
       </div>
     </div>
   </div>
+</div>
 </div>
