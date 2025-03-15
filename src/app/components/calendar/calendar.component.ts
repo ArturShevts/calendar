@@ -97,12 +97,14 @@ export class CalendarComponent implements OnInit {
     })),
   );
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.calendarService.updateRemindersWeather();
+  }
 
   getWeather(city: string) {
-    const x = this.weatherService.getWeatherInformation(city);
-    console.log(x);
-    return x;
+    // const x = this.weatherService.getWeatherInformation(city, date);
+    // console.log(x);
+    // return x;
   }
 
   openReminderForm(date: Date, reminder?: Reminder) {

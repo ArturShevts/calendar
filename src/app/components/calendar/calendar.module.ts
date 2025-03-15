@@ -9,11 +9,13 @@ import { ReminderFormModule } from '../reminder-form/reminder-form.module';
 import { MatDialogModule } from '@angular/material/dialog';
 import { FormsModule } from '@angular/forms';
 import { ReminderComponent } from './reminder/reminder.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [CalendarComponent, ReminderComponent],
   exports: [CalendarComponent, ReminderComponent],
   imports: [
+    HttpClientModule,
     CommonModule,
     CalendarRoutingModule,
     SharedModule,

@@ -8,34 +8,22 @@ export interface Reminder {
   weather?: any;
 }
 
-export enum SupportedCities {
-  Astana = 'Astana',
-  Boston = 'Boston',
-  Chicago = 'Chicago',
-  Denver = 'Denver',
-  Edinburgh = 'Edinburgh',
-  Florence = 'Florence',
-  Geneva = 'Geneva',
-  Helsinki = 'Helsinki',
-  Istanbul = 'Istanbul',
-  Jakarta = 'Jakarta',
-  Kyoto = 'Kyoto',
-  London = 'London',
-  Moscow = 'Moscow',
-  Nairobi = 'Nairobi',
-  Oslo = 'Oslo',
-  Paris = 'Paris',
-  Quebec = 'Quebec',
-  Rome = 'Rome',
-  Sydney = 'Sydney',
-  Tokyo = 'Tokyo',
-  Ulaanbaatar = 'Ulaanbaatar',
-  Vienna = 'Vienna',
-  Warsaw = 'Warsaw',
-  Xiamen = 'Xiamen',
-  Yokohama = 'Yokohama',
-  Zurich = 'Zurich',
-}
+export type City =
+  | 'Helsinki'
+  | 'Kyoto'
+  | 'London'
+  | 'Moscow'
+  | 'Oslo'
+  | 'Paris';
+
+export const Cities: Record<City, City> = {
+  Helsinki: 'Helsinki',
+  Kyoto: 'Kyoto',
+  London: 'London',
+  Moscow: 'Moscow',
+  Oslo: 'Oslo',
+  Paris: 'Paris',
+};
 
 //  generate reminders for march 4 and 26 2025
 export const mockReminders: ReminderMap = new Map(
@@ -50,17 +38,20 @@ export const mockReminders: ReminderMap = new Map(
           text: `ＷＩＤＥＳＴ　ＣＨＡＲＡＣＴＥＲＳ　３０`,
           dateTime: date,
           color: 'red',
+          city: 'Helsinki',
         },
 
         {
           text: `abcdefghijklmnopqrstuvwxyzABCD`,
           dateTime: date2,
           color: 'blue',
+          city: 'Kyoto',
         },
         {
           text: `abcdefg hijlmnopq rstuvwxyzABCD`,
           dateTime: date3,
           color: 'blue',
+          city: 'London',
         },
         {
           text: `walk the plank`,
