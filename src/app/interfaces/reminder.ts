@@ -8,6 +8,35 @@ export interface Reminder {
   weather?: any;
 }
 
+export enum SupportedCities {
+  Astana = 'Astana',
+  Boston = 'Boston',
+  Chicago = 'Chicago',
+  Denver = 'Denver',
+  Edinburgh = 'Edinburgh',
+  Florence = 'Florence',
+  Geneva = 'Geneva',
+  Helsinki = 'Helsinki',
+  Istanbul = 'Istanbul',
+  Jakarta = 'Jakarta',
+  Kyoto = 'Kyoto',
+  London = 'London',
+  Moscow = 'Moscow',
+  Nairobi = 'Nairobi',
+  Oslo = 'Oslo',
+  Paris = 'Paris',
+  Quebec = 'Quebec',
+  Rome = 'Rome',
+  Sydney = 'Sydney',
+  Tokyo = 'Tokyo',
+  Ulaanbaatar = 'Ulaanbaatar',
+  Vienna = 'Vienna',
+  Warsaw = 'Warsaw',
+  Xiamen = 'Xiamen',
+  Yokohama = 'Yokohama',
+  Zurich = 'Zurich',
+}
+
 //  generate reminders for march 4 and 26 2025
 export const mockReminders: ReminderMap = new Map(
   Array.from({ length: 2 }, (_, i) => {
