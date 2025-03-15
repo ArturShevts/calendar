@@ -60,6 +60,12 @@
         >
           {{ day.date.getDate() }}
         </div>
+
+     <div class="cell-content">
+       <div *ngFor="let reminder of vm.reminders.get(day.date.toDateString())" class="reminder">
+         {{ reminder.text }}
+       </div>
+     </div>
       </div>
     </div>
   </div>

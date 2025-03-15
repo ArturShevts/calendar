@@ -22,7 +22,11 @@ import {
 } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Reminder } from '../../interfaces/reminder';
-import { CalendarService, Notification } from '../../services/calendar.service';
+import {
+  CalendarService,
+  Notification,
+  ReminderMap,
+} from '../../services/calendar.service';
 import { WeatherService } from '../../services/weather.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ReminderFormComponent } from '../reminder-form/reminder-form.component';
@@ -69,7 +73,7 @@ export class CalendarComponent implements OnInit {
   public $vm: Observable<{
     selectedDate: Date;
     notification: Notification;
-    reminders: Reminder[];
+    reminders: ReminderMap;
   }> = combineLatest([
     this.selectedDate.asObservable().pipe(
       distinctUntilChanged(),
@@ -79,9 +83,10 @@ export class CalendarComponent implements OnInit {
       startWith({ body: 'Welcome!', error: false }),
       tap((notification) => this.openNotification(notification)),
     ),
-    this.calendarService.$reminders.pipe(
-      map((reminders) => Array.from(reminders.values())),
-    ),
+    this.calendarService.$reminders
+      .pipe
+      // map((reminders) => Array.from(reminders.values())),
+      (),
   ]).pipe(
     map(([selectedDate, notifications, reminders]) => ({
       selectedDate,
@@ -105,6 +110,10 @@ export class CalendarComponent implements OnInit {
         reminder,
       },
     });
+  }
+
+  getReminders(date: Date) {
+    return;
   }
 
   openNotification(notification: Notification) {

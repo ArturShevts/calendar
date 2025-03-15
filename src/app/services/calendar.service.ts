@@ -3,7 +3,7 @@ import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import { mockReminders, Reminder } from '../interfaces/reminder';
 import { ApiService } from './api.service';
 
-export type ReminderMap = Map<string, Reminder>;
+export type ReminderMap = Map<string, Reminder[]>;
 
 export interface Notification {
   body: string;
@@ -25,20 +25,19 @@ export class CalendarService {
   constructor() {}
 
   create(reminder: Reminder) {
-    console.log(reminder);
-    let remindersMap = this.reminders.getValue();
-
-    if (remindersMap.has(reminder.dateTime.toISOString())) {
-      this.notification.next({
-        body: `Reminder already exists for ${reminder.dateTime.toDateString()}`,
-        error: true,
-      });
-      return;
+    console.log('!! Create Reminder !!', reminder);
+    try {
+      let remindersMap = this.reminders.getValue();
+      let remindersArr =
+        remindersMap.get(reminder.dateTime.toDateString()) || [];
+      remindersArr.push(reminder);
+      remindersMap.set(reminder.dateTime.toDateString(), remindersArr);
+      this.reminders.next(remindersMap);
+    } catch (error) {
+      this.notification.next({ body: 'Error creating reminder!', error: true });
     }
-    remindersMap.set(reminder.dateTime.toISOString(), reminder);
-    this.reminders.next(remindersMap);
+
     this.notification.next({ body: 'Reminder created!', error: false });
-    // this.apiService.post(reminder)
   }
 
   edit(data: Reminder) {
