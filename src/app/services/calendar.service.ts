@@ -1,6 +1,16 @@
-import { Injectable } from '@angular/core';
+import {inject, Injectable, signal, WritableSignal} from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { Reminder } from '../interfaces/reminder';
+import {mockReminders, Reminder} from '../interfaces/reminder';
+import {ApiService} from "./api.service";
+
+export type  ReminderMap  =Map<string, Reminder>
+
+
+
+export interface Notification {
+  body: string;
+  error: boolean;
+}
 
 
 @Injectable({
@@ -8,25 +18,29 @@ import { Reminder } from '../interfaces/reminder';
 })
 export class CalendarService {
 
-  reminders: Reminder[] = [];
+  reminders:ReminderMap= new Map();
+  notification: WritableSignal<Notification|undefined> = signal(undefined);
+
+  apiService = inject(ApiService)
 
   constructor() { }
 
-  create(data: Reminder): Reminder {
-    return data;
+  create(reminder: Reminder) {
+    this.reminders.set(reminder.dateTime.toISOString(),reminder);
+      // this.apiService.post(reminder)
   }
 
-  edit(data: Reminder): Reminder {
-    return data;
+  edit(data: Reminder)  {
+     this.reminders.set(data.dateTime.toISOString(), data);
   }
 
   list(date: Date): Observable<Reminder[]> {
-    console.log(date);
-    return of(this.reminders);
+      this.reminders = mockReminders;
+     return of(Array.from(this.reminders.values()));
   }
 
-  delete(reminderId: string): boolean {
-    console.log(reminderId);
-    return true;
-  }
+  delete(reminder: Reminder) {
+    this.reminders.delete(reminder.dateTime.toISOString() );
+   }
+
 }
