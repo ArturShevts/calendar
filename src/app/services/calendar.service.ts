@@ -1,5 +1,5 @@
 import { inject, Injectable, signal, WritableSignal } from '@angular/core';
-import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, of, startWith, Subject } from 'rxjs';
 import { mockReminders, Reminder } from '../interfaces/reminder';
 import { ApiService } from './api.service';
 
@@ -18,7 +18,9 @@ export class CalendarService {
   public $notification = this.notification.asObservable();
   private reminders: BehaviorSubject<ReminderMap> =
     new BehaviorSubject<ReminderMap>(mockReminders); // new Map<string, Reminder>()
-  public $reminders = this.reminders.asObservable();
+  public $reminders = this.reminders
+    .asObservable()
+    .pipe(startWith(mockReminders));
 
   apiService = inject(ApiService);
 
@@ -30,6 +32,13 @@ export class CalendarService {
       let remindersMap = this.reminders.getValue();
       let remindersArr =
         remindersMap.get(reminder.dateTime.toDateString()) || [];
+      if (remindersArr.length >= 6) {
+        this.notification.next({
+          body: 'Maximum 6 reminders per day!',
+          error: true,
+        });
+        return;
+      }
       remindersArr.push(reminder);
       remindersMap.set(reminder.dateTime.toDateString(), remindersArr);
       this.reminders.next(remindersMap);

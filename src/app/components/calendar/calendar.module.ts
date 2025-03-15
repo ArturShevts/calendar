@@ -7,12 +7,12 @@ import { SharedModule } from '../../modules/shared/shared.module';
 import { ReminderFormComponent } from '../reminder-form/reminder-form.component';
 import { ReminderFormModule } from '../reminder-form/reminder-form.module';
 import { MatDialogModule } from '@angular/material/dialog';
-import {FormsModule} from "@angular/forms";
-
+import { FormsModule } from '@angular/forms';
+import { ReminderComponent } from './reminder/reminder.component';
 
 @NgModule({
-  declarations: [CalendarComponent],
-  exports: [CalendarComponent],
+  declarations: [CalendarComponent, ReminderComponent],
+  exports: [CalendarComponent, ReminderComponent],
   imports: [
     CommonModule,
     CalendarRoutingModule,
@@ -22,4 +22,4 @@ import {FormsModule} from "@angular/forms";
     FormsModule,
   ],
 })
-export class CalendarModule { }
+export class CalendarModule {}

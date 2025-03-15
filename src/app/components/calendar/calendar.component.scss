@@ -22,8 +22,7 @@
   .title-month {
     font-size: 1.5em;
     width: 150px;
-    min-width:100px;
-    text-align: center;
+     text-align: center;
   }
 }
 .calendar {
@@ -34,9 +33,12 @@
   width: 100%;
 
   .calendar-header {
+    text-align: center;
+     align-items: center;
     display: grid;
+    height: 40px;
     grid-template-columns: repeat(7, 1fr);
-    background-color: darkseagreen;
+    background-color: lightsteelblue;
     font-weight: bold;
   }
 
@@ -47,14 +49,28 @@
   }
 
   .calendar-cell {
+    width: 200px;
+    height: 150px;
+    overflow-y: scroll;
     border: 1px solid #ccc;
-    padding: 10px;
-    text-align: center;
-    box-sizing: border-box;
-    .cell-date {
+
+
+    scrollbar-width: none; /* For Firefox */
+    -ms-overflow-style: none;  /* For Internet Explorer and Edge */
+    ::-webkit-scrollbar {
+      display: none; /* For Chrome, Safari, and Opera */
+    }
+     .cell-date {
+      background-color: white;
+      z-index: 1;
+      width: 30px;
+      border-radius: 0 2px 24px 2px;
+      height: 24px;
+
+      position: absolute;
       font-weight: bold;
       text-align: left;
-
+      padding-left: 8px;
     }
     .hidden {
       color: grey;
@@ -65,7 +81,9 @@
 
   }
   .selected {
-     border: 2px solid lightblue;
+     outline: 2px solid lightblue;
+    border: 1px solid lightblue;
+
   }
   .current {
     background-color: lightcyan;

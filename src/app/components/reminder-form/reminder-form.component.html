@@ -8,12 +8,12 @@
     <div class="form-container">
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Reminder Text</mat-label>
-        <textarea matInput formControlName="text" placeholder="Enter reminder text"  maxlength="140"
+        <textarea matInput formControlName="text" placeholder="Enter reminder text"  maxlength="30"
                    cdkTextareaAutosize
                   #autosize="cdkTextareaAutosize"
                   cdkAutosizeMinRows=4
         ></textarea>
-        <mat-hint align="end">{{reminderFormGroup.get('text')?.value?.length || 0}}/140</mat-hint>
+        <mat-hint align="end">{{reminderFormGroup.get('text')?.value?.length || 0}}/30</mat-hint>
         <mat-error *ngIf="reminderFormGroup.get('text')?.hasError('required')">
           Text is required
         </mat-error>

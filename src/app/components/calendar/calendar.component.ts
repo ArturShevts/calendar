@@ -83,10 +83,12 @@ export class CalendarComponent implements OnInit {
       startWith({ body: 'Welcome!', error: false }),
       tap((notification) => this.openNotification(notification)),
     ),
-    this.calendarService.$reminders
-      .pipe
+    this.calendarService.$reminders.pipe(
       // map((reminders) => Array.from(reminders.values())),
-      (),
+      tap((reminders) => {
+        console.log('reminders', reminders);
+      }),
+    ),
   ]).pipe(
     map(([selectedDate, notifications, reminders]) => ({
       selectedDate,
