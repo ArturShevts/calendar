@@ -72,12 +72,12 @@ export class CalendarComponent implements OnInit {
     reminders: Reminder[];
   }> = combineLatest([
     this.selectedDate.asObservable().pipe(
-      debounceTime(300),
       distinctUntilChanged(),
       tap((selectedDate: Date) => this.fillCalendar(selectedDate)),
     ),
     this.calendarService.$notification.pipe(
-      startWith({ body: '', error: false }),
+      startWith({ body: 'Welcome!', error: false }),
+      tap((notification) => this.openNotification(notification)),
     ),
     this.calendarService.$reminders.pipe(
       map((reminders) => Array.from(reminders.values())),
@@ -90,10 +90,7 @@ export class CalendarComponent implements OnInit {
     })),
   );
 
-  ngOnInit(): void {
-    this.fillCalendar(new Date());
-    // this.openNotification();
-  }
+  ngOnInit(): void {}
 
   getWeather(city: string) {
     const x = this.weatherService.getWeatherInformation(city);
@@ -110,16 +107,12 @@ export class CalendarComponent implements OnInit {
     });
   }
 
-  openNotification() {
-    this.calendarService.$notification.pipe(
-      tap((notice: Notification) => {
-        this.snackBar.open(notice.body, 'Close', {
-          panelClass: notice.error ? ['error'] : ['success'],
-          duration: 3000,
-          verticalPosition: 'top',
-        });
-      }),
-    );
+  openNotification(notification: Notification) {
+    this.snackBar.open(notification.body, 'Close', {
+      panelClass: notification.error ? ['error'] : ['success'],
+      duration: 3000,
+      verticalPosition: 'top',
+    });
   }
 
   // CALENDAR COMPONENT
@@ -159,7 +152,7 @@ export class CalendarComponent implements OnInit {
         reminders: [],
         weather: {},
         display: newDate.getMonth() === selectedDate.getMonth(),
-        selected: false,
+        selected: newDate.toDateString() === selectedDate.toDateString(),
         current: newDate.toDateString() === new Date().toDateString(),
       };
 

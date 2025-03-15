@@ -29,7 +29,10 @@ export class CalendarService {
     let remindersMap = this.reminders.getValue();
 
     if (remindersMap.has(reminder.dateTime.toISOString())) {
-      this.notification.next({ body: 'Reminder already exists', error: true });
+      this.notification.next({
+        body: `Reminder already exists for ${reminder.dateTime.toDateString()}`,
+        error: true,
+      });
       return;
     }
     remindersMap.set(reminder.dateTime.toISOString(), reminder);

@@ -22,10 +22,12 @@
   .title-month {
     font-size: 1.5em;
     width: 150px;
-text-align: center;
+    text-align: center;
   }
 }
 .calendar {
+  max-width: 1400px;
+  margin: 0 auto;
   display: grid;
   grid-template-rows: auto 1fr;
   width: 100%;
@@ -62,10 +64,10 @@ text-align: center;
 
   }
   .selected {
-    border-color: red;
+     border: 2px solid lightblue;
   }
   .current {
-    background-color: blue;
+    background-color: lightcyan;
   }
 
 }

@@ -1,54 +1,66 @@
-<div *ngIf="$vm | async as vd">
+<div *ngIf="$vm | async as vm" >
+  <mat-toolbar class="app-navbar">
+    <button mat-icon-button>
+      <mat-icon>menu</mat-icon>
+    </button>
+    <span>Jobsity challenge</span>
+    <span class="spacer"></span>
+    <button mat-button (click)="openReminderForm(vm.selectedDate)">
+      <mat-icon>add</mat-icon> New reminder
+    </button>
+  </mat-toolbar>
 
-<mat-toolbar class="app-navbar">
-  <button mat-icon-button>
-    <mat-icon>menu</mat-icon>
-  </button>
-  <span>Jobsity challenge</span>
-  <span class="spacer"></span>
-  <button mat-button (click)="openReminderForm(vd.selectedDate)">
-    <mat-icon>add</mat-icon> New reminder
-  </button>
-</mat-toolbar>
-
-<div class="year-select">
-  <button mat-icon-button (click)="changeYear(-1)">
-    <mat-icon>keyboard_arrow_left</mat-icon>
-  </button>
-  <div class="title-year">{{ vd.selectedDate.getFullYear() }}</div>
-  <button mat-icon-button (click)="changeYear(1)">
-    <mat-icon>keyboard_arrow_right</mat-icon>
-  </button>
-</div>
-
-<div class="month-select">
-  <button mat-icon-button (click)="changeMonth(-1)">
-    <mat-icon>keyboard_arrow_left</mat-icon>
-  </button>
-  <div class="title-month">{{ vd.selectedDate.toLocaleString('default', { month: 'long' }) }}</div>
-  <button mat-icon-button (click)="changeMonth(1)">
-    <mat-icon>keyboard_arrow_right</mat-icon>
-  </button>
-</div>
-
-<div class="calendar">
-  <div class="calendar-header">
-    <div class="calendar-cell">Sun</div>
-    <div class="calendar-cell">Mon</div>
-    <div class="calendar-cell">Tue</div>
-    <div class="calendar-cell">Wed</div>
-    <div class="calendar-cell">Thu</div>
-    <div class="calendar-cell">Fri</div>
-    <div class="calendar-cell">Sat</div>
+  <div class="year-select">
+    <button mat-icon-button (click)="changeYear(-1)">
+      <mat-icon>keyboard_arrow_left</mat-icon>
+    </button>
+    <div class="title-year">{{ vm.selectedDate.getFullYear() }}</div>
+    <button mat-icon-button (click)="changeYear(1)">
+      <mat-icon>keyboard_arrow_right</mat-icon>
+    </button>
   </div>
-  <div class="calendar-body">
-    <div class="calendar-cell" *ngFor="let day of calenderData" (click)="selectDate(day.date)"
-         [class.selected]="day.selected" [class.current]="day.current">
-      <div class="cell-date" [class.weekend]="day.date.getDay() === 0 || day.date.getDay() === 6"
-           [class.hidden]="!day.display">
-        {{ day.date.getDate() }}
+
+  <div class="month-select">
+    <button mat-icon-button (click)="changeMonth(-1)">
+      <mat-icon>keyboard_arrow_left</mat-icon>
+    </button>
+    <div class="title-month">
+      {{ vm.selectedDate.toLocaleString('default', { month: 'long' }) }}
+    </div>
+    <button mat-icon-button (click)="changeMonth(1)">
+      <mat-icon>keyboard_arrow_right</mat-icon>
+    </button>
+  </div>
+
+  <div class="calendar">
+    <div class="calendar-header">
+      <div class="calendar-cell">Sun</div>
+      <div class="calendar-cell">Mon</div>
+      <div class="calendar-cell">Tue</div>
+      <div class="calendar-cell">Wed</div>
+      <div class="calendar-cell">Thu</div>
+      <div class="calendar-cell">Fri</div>
+      <div class="calendar-cell">Sat</div>
+    </div>
+    <div class="calendar-body">
+      <div
+        class="calendar-cell"
+        *ngFor="let day of calenderData"
+        (click)="selectDate(day.date)"
+        [class.selected]="day.selected"
+        [class.current]="day.current"
+      >
+        <div
+          class="cell-date"
+          [class.weekend]="
+            (day.date.getDay() === 0 || day.date.getDay() === 6)
+            && day.display
+          "
+          [class.hidden]="!day.display"
+        >
+          {{ day.date.getDate() }}
+        </div>
       </div>
     </div>
   </div>
-</div>
 </div>
