@@ -1,15 +1,30 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import {BehaviorSubject, debounceTime, distinctUntilChanged, map, Subject} from 'rxjs';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  OnDestroy,
+  OnInit,
+  WritableSignal,
+} from '@angular/core';
+import {
+  BehaviorSubject,
+  combineLatest,
+  debounceTime,
+  distinctUntilChanged,
+  map,
+  Observable,
+  Subject,
+  tap,
+} from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Reminder } from '../../interfaces/reminder';
-import { CalendarService } from '../../services/calendar.service';
+import { CalendarService, Notification } from '../../services/calendar.service';
 import { WeatherService } from '../../services/weather.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ReminderFormComponent } from '../reminder-form/reminder-form.component';
-import {FormControl} from "@angular/forms";
+import { MatSnackBar } from '@angular/material/snack-bar';
 
-
-export interface Day  {
+export interface Day {
   date: Date;
   reminders: Reminder[];
   weather: any;
@@ -17,7 +32,7 @@ export interface Day  {
   selected: boolean;
   current: boolean;
 }
- export const MonthsMap = {
+export const MonthsMap = {
   0: 'January',
   1: 'February',
   2: 'March',
@@ -30,53 +45,47 @@ export interface Day  {
   9: 'October',
   10: 'November',
   11: 'December',
- }
-
-
+};
 
 @Component({
   selector: 'app-calendar',
   templateUrl: './calendar.component.html',
-  styleUrls: ['./calendar.component.scss']
+  styleUrls: ['./calendar.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CalendarComponent implements OnInit, OnDestroy {
-  selectedDate = new  BehaviorSubject<Date>(new Date());
-  $selectedDate = this.selectedDate.asObservable();
-
-
-  selectedYearControl =  this.selectedDate.getValue().getFullYear()
-  selectedMonthControl =  this.selectedDate.getValue().getMonth()
-
-  tempDays: Day[] = [];
-  onDestroy$ = new Subject<boolean>();
+export class CalendarComponent implements OnInit {
+  selectedDate = new BehaviorSubject<Date>(new Date());
+  snackBar = inject(MatSnackBar);
+  viewData = new Observable<[Date, Notification, Reminder[]]>();
 
   constructor(
     private calendarService: CalendarService,
     private weatherService: WeatherService,
     private matDialog: MatDialog,
-  ) { }
-
+  ) {}
 
   ngOnInit(): void {
-    this.$selectedDate.pipe(distinctUntilChanged(),
-      debounceTime(300)
-    ).subscribe((date) => {
-      console.log("selected Date : "+date.toDateString());
-      this.fillCalendar(this.selectedDate.value);
-    })
+    this.fillCalendar(new Date());
+    this.openNotification();
 
-this.fillCalendar(new Date());
+    this.viewData = combineLatest([
+      this.selectedDate.asObservable().pipe(debounceTime(300)),
+      this.calendarService.$notification,
+      this.calendarService.$reminders.pipe(
+        map((reminders) => Array.from(reminders.values())),
+      ),
+    ]);
 
-    this.calendarService.list(new Date())
-      .pipe(takeUntil(this.onDestroy$))
-      .subscribe((reminders: Reminder[]) => {
+    this.calendarService.list(new Date()).pipe(
+      tap((reminders: Reminder[]) =>
         reminders.map((reminder: Reminder) => {
           return {
             ...reminder,
             weather: this.getWeather(reminder?.city ?? ''),
           };
-        });
-      });
+        }),
+      ),
+    );
   }
 
   getWeather(city: string) {
@@ -85,14 +94,7 @@ this.fillCalendar(new Date());
     return x;
   }
 
-
-
-  ngOnDestroy() {
-    this.onDestroy$.next(true);
-    this.onDestroy$.complete();
-  }
-
-  openReminderForm(date: Date,reminder?: Reminder) {
+  openReminderForm(date: Date, reminder?: Reminder) {
     this.matDialog.open(ReminderFormComponent, {
       data: {
         date,
@@ -101,53 +103,84 @@ this.fillCalendar(new Date());
     });
   }
 
+  openNotification() {
+    this.calendarService.$notification.pipe(
+      tap((notice: Notification) => {
+        this.snackBar.open(notice.body, 'Close', {
+          panelClass: notice.error ? ['error'] : ['success'],
+          duration: 3000,
+          verticalPosition: 'top',
+        });
+      }),
+    );
+  }
 
+  // CALENDAR COMPONENT
 
+  public selectDate(selectedDate: Date) {
+    this.selectedDate.next(selectedDate);
+  }
 
+  public fillCalendar(selectedDate: Date) {
+    let firstDayMonth = new Date(
+      selectedDate.getFullYear(),
+      selectedDate.getMonth(),
+      1,
+    );
 
-// CALENDAR COMPONENT
+    let firstDisplayDate = new Date(
+      selectedDate.getFullYear(),
+      selectedDate.getMonth(),
+      firstDayMonth.getDate() - firstDayMonth.getDay(),
+    );
 
-public selectDate(selectedDate: Date) {
-   this.selectedDate.next(selectedDate);
+    let firstSatOfNextMonth = new Date(
+      selectedDate.getFullYear(),
+      selectedDate.getMonth() + 1,
+      1,
+    );
+    let days: Day[] = [];
+    for (let i = 0; i < 42; i++) {
+      // NOTE: small chance that feb 1st is a Sunday, in which case we only need to display 28 days
+      let newDate = new Date(
+        firstDisplayDate.getFullYear(),
+        firstDisplayDate.getMonth(),
+        firstDisplayDate.getDate() + i,
+      );
+      let newDay: Day = {
+        date: newDate,
+        reminders: [],
+        weather: {},
+        display: newDate.getMonth() === selectedDate.getMonth(),
+        selected: false,
+        current: newDate.toDateString() === new Date().toDateString(),
+      };
 
-}
+      days.push(newDay);
+    }
+    console.log(days);
+    this.tempDays = days;
+  }
 
+  // year and month select
 
-public fillCalendar(selectedDate:Date) {
-    let firstDayMonth = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1);
+  public changeMonth(changeBy: number) {
+    this.selectedDate.next(
+      new Date(
+        this.selectedDate.value.getFullYear(),
+        this.selectedDate.value.getMonth() + changeBy,
+        1,
+      ),
+    );
+  }
 
-    let firstDisplayDate =    new Date(selectedDate.getFullYear(), selectedDate.getMonth(), firstDayMonth.getDate() - firstDayMonth.getDay());
-
-    let firstSatOfNextMonth = new Date(selectedDate.getFullYear(), selectedDate.getMonth() + 1, 1);
- let days:Day[] = [];
-for (let i = 0; i < 42; i++) {
-   // NOTE: small chance that feb 1st is a Sunday, in which case we only need to display 28 days
-   let newDate = new Date(firstDisplayDate.getFullYear(), firstDisplayDate.getMonth(), firstDisplayDate.getDate() + i)
-  let newDay: Day = {
-    date: newDate,
-    reminders: [],
-    weather: {},
-    display: newDate.getMonth() === selectedDate.getMonth(),
-    selected : false,
-    current: newDate.toDateString() === new Date().toDateString()
- }
-
-  days.push(newDay)
-}
-  console.log(days)
-this.tempDays = days
-}
-
-// year and month select
-
-public changeMonth(changeBy: number) {
-  this.selectedDate.next(new Date(this.selectedDate.value.getFullYear(), this.selectedDate.value.getMonth() + changeBy, 1));
-}
-
-
-public changeYear(changeBy:number) {
-  this.selectedDate.next(new Date(this.selectedDate.value.getFullYear() + changeBy, this.selectedDate.value.getMonth(), 1));
-}
-
-  protected readonly MonthsMap = MonthsMap;
+  public changeYear(changeBy: number) {
+    this.selectedDate.next(
+      new Date(
+        this.selectedDate.value.getFullYear() + changeBy,
+        this.selectedDate.value.getMonth(),
+        1,
+      ),
+    );
+  }
 }

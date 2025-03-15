@@ -1,7 +1,8 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import {Component, inject, Inject, OnInit} from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Reminder } from '../../interfaces/reminder';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {CalendarService} from "../../services/calendar.service";
 
 @Component({
   selector: 'app-reminder-form',
@@ -14,6 +15,7 @@ export class ReminderFormComponent implements OnInit {
     {name: 'Green', value: 'green'},
     {name: 'Yellow', value: 'yellow'},
   ]
+  calendarService = inject(CalendarService);
   constructor(@Inject(MAT_DIALOG_DATA) public data: { date:Date, reminder: Reminder }) { }
 
   reminderFormGroup?:  FormGroup;
@@ -49,14 +51,20 @@ if (!this.reminderFormGroup) { console.error("Form is not initialized")
   return;
 }
 let formData = this.reminderFormGroup.value;
+    console.log(formData)
 let newReminder:Reminder = {
   text: formData.text,
-  dateTime:  new Date(formData.date, formData.time),
+  dateTime:  new Date(formData.date),
   city: formData.city,
   color: formData.color,
 }
-
+this.calendarService.create(newReminder)
 return
   }
+
+  // private makeDate(date: Date, t: Date): Date {
+  //   date.setHours(t.getHours(), t.getMinutes(), t.getSeconds(), t.getMilliseconds());
+  // return  date;
+  // }
 
 }
