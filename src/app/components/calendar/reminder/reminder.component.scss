@@ -1,0 +1,43 @@
+.reminders-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 24px 8px ;
+
+  //overflow-y: scroll;
+}
+
+.reminder-item {
+  min-height: 24px;
+  white-space: normal; /* Allow text to wrap */
+
+  display: flex;
+  gap: 6px;
+  padding: 2px 2px 2px 0;
+  font-size: 0.75rem;
+  cursor: pointer;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  background-color: beige;
+  border-radius: 4px;
+}
+
+.reminder-content {
+    overflow-x: hidden;
+  text-wrap:wrap ;
+  text-overflow: ellipsis;
+  font-weight: 500;
+}
+
+.reminder-time {
+  font-size: 0.7rem;
+  opacity: 0.8;
+}
+
+.color-label {
+  min-width: 4px;
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+}
+
+
