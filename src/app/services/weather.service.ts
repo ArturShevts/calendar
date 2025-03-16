@@ -1,8 +1,8 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { City } from '../interfaces/reminder';
+import { City, Cities } from '../interfaces/reminder';
 import { API_KEY, ENDPOINT_URL } from '../app.config';
-import { catchError, map, take, tap, throwError } from 'rxjs';
+import { catchError, map, of, take, tap, throwError } from 'rxjs';
 import { WeatherResponse } from '../interfaces/weather.model';
 
 @Injectable({
@@ -21,7 +21,7 @@ export class WeatherService {
       dateString +
       '?key=' +
       this.key +
-      '&include=days&elements=temp,datetime';
+      '&include=days&elements=temp,icon,datetime';
     console.log('url', url);
 
     return this.http
@@ -59,4 +59,6 @@ export class WeatherService {
         }),
       );
   }
+
+  // check if city exists {}
 }

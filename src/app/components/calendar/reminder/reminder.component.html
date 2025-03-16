@@ -2,7 +2,10 @@
   <div class="reminder-item" *ngFor="let reminder of reminders">
     <div class="color-label" [style.backgroundColor]="reminder.color || 'grey'"></div>
       <div class="reminder-content" [title]="reminder.text">       <span class="reminder-time">{{reminder.dateTime | date:'shortTime'}} </span>
-        {{reminder.weather}}</div>
+        {{reminder.text}}</div>
+    <div class="weather">
+     <app-icon [iconName]="reminder.weather.icon">  </app-icon>
+    </div>
 
   </div>
 </div>

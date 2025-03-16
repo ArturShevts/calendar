@@ -127,7 +127,7 @@ export class CalendarService implements OnInit {
           let $update = this.apiService
             .getWeatherInformation(reminder.city as City, reminder.dateTime)
             .subscribe((weather) => {
-              reminder.weather = weather?.temp;
+              reminder.weather = weather;
             });
           updateObservables.push(remindersArr);
         }
