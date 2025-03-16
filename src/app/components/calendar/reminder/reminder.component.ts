@@ -10,7 +10,6 @@ import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-reminder',
-  // standalone: true,
   templateUrl: './reminder.component.html',
   styleUrl: './reminder.component.scss',
   standalone: false,

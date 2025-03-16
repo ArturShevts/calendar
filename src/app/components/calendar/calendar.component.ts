@@ -71,12 +71,10 @@ export class CalendarComponent implements OnInit {
   public $vm: Observable<{
     days: Day[];
     notification: Notification;
+    selectedDate: Date;
   }> = combineLatest([
     // convert to selected month
-    this.selectedDate.asObservable().pipe(
-      distinctUntilChanged(),
-      map((selectedDate: Date) => this.fillCalendar(selectedDate)),
-    ),
+    this.selectedDate.asObservable().pipe(distinctUntilChanged()),
     this.calendarService.$notification.pipe(
       startWith({ body: 'Welcome!', error: false }),
       tap((notification) => this.openNotification(notification)),
@@ -87,7 +85,8 @@ export class CalendarComponent implements OnInit {
       }),
     ),
   ]).pipe(
-    map(([days, notifications, reminders]) => {
+    map(([selectedDate, notification, reminders]) => {
+      let days = this.fillCalendar(selectedDate);
       for (const day of days) {
         day.reminders = Array.from(reminders.entries()).reduce(
           (acc, [id, reminder]) => {
@@ -102,8 +101,9 @@ export class CalendarComponent implements OnInit {
       console.log(days);
 
       return {
-        days: days,
-        notification: notifications,
+        selectedDate,
+        days,
+        notification,
       };
     }),
   );
@@ -148,13 +148,27 @@ export class CalendarComponent implements OnInit {
     );
 
     let days: Day[] = [];
-    for (let i = 0; i < 42; i++) {
-      // NOTE: small chance that feb 1st is a Sunday, in which case we only need to display 28 days
+    const daysInMonth = new Date(
+      selectedDate.getFullYear(),
+      selectedDate.getMonth() + 1,
+      0,
+    ).getDate();
+    let totalDays = daysInMonth + firstDayMonth.getDay();
+    if (totalDays > 28 && totalDays <= 35) {
+      totalDays = 35;
+    } else if (totalDays > 35) {
+      totalDays = 42;
+    }
+
+    for (let i = 0; i < totalDays; i++) {
+      // NOTE: small chance that feb 1st is a Sunday, in which case we only need to display 28 days but will ignore to support
+
       let newDate = new Date(
         firstDisplayDate.getFullYear(),
         firstDisplayDate.getMonth(),
         firstDisplayDate.getDate() + i,
       );
+
       let newDay: Day = {
         date: newDate,
         reminders: [],

@@ -10,27 +10,27 @@
     </button>
   </mat-toolbar>
 
-<!--  <div class="year-select">-->
-<!--    <button mat-icon-button (click)="changeYear(-1)">-->
-<!--      <mat-icon>keyboard_arrow_left</mat-icon>-->
-<!--    </button>-->
-<!--    <div class="title-year">{{ vm.selectedDate.getFullYear() }}</div>-->
-<!--    <button mat-icon-button (click)="changeYear(1)">-->
-<!--      <mat-icon>keyboard_arrow_right</mat-icon>-->
-<!--    </button>-->
-<!--  </div>-->
+  <div class="year-select">
+    <button mat-icon-button (click)="changeYear(-1)">
+      <mat-icon>keyboard_arrow_left</mat-icon>
+    </button>
+    <div class="title-year">{{ vm.selectedDate.getFullYear() }}</div>
+    <button mat-icon-button (click)="changeYear(1)">
+      <mat-icon>keyboard_arrow_right</mat-icon>
+    </button>
+  </div>
 
-<!--  <div class="month-select">-->
-<!--    <button mat-icon-button (click)="changeMonth(-1)">-->
-<!--      <mat-icon>keyboard_arrow_left</mat-icon>-->
-<!--    </button>-->
-<!--    <div class="title-month">-->
-<!--      {{ vm.selectedDate.toLocaleString('default', { month: 'long' }) }}-->
-<!--    </div>-->
-<!--    <button mat-icon-button (click)="changeMonth(1)">-->
-<!--      <mat-icon>keyboard_arrow_right</mat-icon>-->
-<!--    </button>-->
-<!--  </div>-->
+  <div class="month-select">
+    <button mat-icon-button (click)="changeMonth(-1)">
+      <mat-icon>keyboard_arrow_left</mat-icon>
+    </button>
+    <div class="title-month">
+      {{ vm.selectedDate.toLocaleString('default', { month: 'long' }) }}
+    </div>
+    <button mat-icon-button (click)="changeMonth(1)">
+      <mat-icon>keyboard_arrow_right</mat-icon>
+    </button>
+  </div>
 
   <div class="calendar">
     <div class="calendar-header">
