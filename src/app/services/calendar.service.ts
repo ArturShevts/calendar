@@ -72,7 +72,7 @@ export class CalendarService implements OnInit {
       remindersMap.get(reminder.dateTime.toISOString().split('T')[0]) || [];
 
     if (edit) {
-      let index = remindersArr.findIndex((r) => r.text === reminder.text);
+      let index = remindersArr.findIndex((r) => r.id === reminder.id);
       if (index === -1) {
         this.notification.next({
           body: 'Reminder not found, could not edit!',

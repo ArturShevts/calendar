@@ -25,7 +25,8 @@ export class ReminderComponent {
     );
   }
 
-  openReminderForm(date: Date, reminder?: Reminder) {
+  openReminderForm(date: Date, reminder: Reminder) {
+    console.log('Open!!!!!!!!!!!', date, reminder);
     this.matDialog.open(ReminderFormComponent, {
       data: {
         date,

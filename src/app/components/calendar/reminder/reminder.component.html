@@ -1,7 +1,7 @@
 <div class="reminders-container" *ngIf="reminders && reminders.length">
-  <div class="reminder-item" *ngFor="let reminder of reminders">
+  <div (click)="openReminderForm(reminder.dateTime, reminder)" class="reminder-item" *ngFor="let reminder of reminders">
 
-    <div class="color-label" [style.backgroundColor]="reminder.color || 'grey'">
+    <div  class="color-label" [style.backgroundColor]="reminder.color || 'grey'">
 
     </div>
       <div class="reminder-content" [title]="reminder.text">       <span class="reminder-time">{{reminder.dateTime | date:'shortTime'}} </span>

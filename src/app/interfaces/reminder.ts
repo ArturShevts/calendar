@@ -1,6 +1,7 @@
 import { ReminderMap } from '../services/calendar.service';
 
 export interface Reminder {
+  id: string;
   text: string;
   dateTime: Date;
   color: string;
@@ -35,6 +36,7 @@ export const mockReminders: ReminderMap = new Map(
       date.toISOString().split('T')[0],
       [
         {
+          id: '123',
           text: `ＷＩＤＥＳＴ　ＣＨＡＲＡＣＴＥＲＳ　３０`,
           dateTime: date,
           color: 'red',
@@ -42,18 +44,24 @@ export const mockReminders: ReminderMap = new Map(
         },
 
         {
+          id: '124',
+
           text: `abcdefghijklmnopqrstuvwxyzABCD`,
           dateTime: date2,
           color: 'blue',
           city: 'Kyoto',
         },
         {
+          id: '125',
+
           text: `abcdefg hijlmnopq rstuvwxyzABCD`,
           dateTime: date3,
           color: 'blue',
           city: 'London',
         },
         {
+          id: '126',
+
           text: `walk the plank`,
           dateTime: date3,
           color: 'blue',

@@ -47,11 +47,12 @@
       <div
         class="calendar-cell"
         *ngFor="let day of calenderData"
-        (click)="selectDate(day.date)"
+
         [class.selected]="day.selected"
         [class.current]="day.current"
       >
         <div
+          (click)="selectDate(day.date)"
           class="cell-date"
           [class.weekend]="
             (day.date.getDay() === 0 || day.date.getDay() === 6)
