@@ -59,7 +59,7 @@ export const MonthsMap = {
   selector: 'app-calendar',
   templateUrl: './calendar.component.html',
   styleUrls: ['./calendar.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  // changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CalendarComponent implements OnInit {
   private snackBar = inject(MatSnackBar);
@@ -165,8 +165,12 @@ export class CalendarComponent implements OnInit {
         reminders: [],
         weather: {},
         display: newDate.getMonth() === selectedDate.getMonth(),
-        selected: newDate.toDateString() === selectedDate.toDateString(),
-        current: newDate.toDateString() === new Date().toDateString(),
+        selected:
+          newDate.toISOString().split('T')[0] ===
+          selectedDate.toISOString().split('T')[0],
+        current:
+          newDate.toISOString().split('T')[0] ===
+          new Date().toISOString().split('T')[0],
       };
 
       days.push(newDay);

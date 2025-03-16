@@ -62,7 +62,7 @@
           {{ day.date.getDate() }}
         </div>
 
-     <app-reminder [reminders]=" vm.reminders.get(day.date.toDateString())">
+     <app-reminder [reminders]=" vm.reminders.get(day.date.toISOString().split('T')[0])">
 
      </app-reminder>
       </div>

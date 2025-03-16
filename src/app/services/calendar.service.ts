@@ -5,7 +5,14 @@ import {
   signal,
   WritableSignal,
 } from '@angular/core';
-import { BehaviorSubject, Observable, of, startWith, Subject } from 'rxjs';
+import {
+  BehaviorSubject,
+  forkJoin,
+  Observable,
+  of,
+  startWith,
+  Subject,
+} from 'rxjs';
 import { City, mockReminders, Reminder } from '../interfaces/reminder';
 import { ApiService } from './api.service';
 import { WeatherService } from './weather.service';
@@ -61,7 +68,8 @@ export class CalendarService implements OnInit {
 
   private updateReminders(reminder: Reminder, edit: boolean) {
     let remindersMap = this.reminders.getValue();
-    let remindersArr = remindersMap.get(reminder.dateTime.toDateString()) || [];
+    let remindersArr =
+      remindersMap.get(reminder.dateTime.toISOString().split('T')[0]) || [];
 
     if (edit) {
       let index = remindersArr.findIndex((r) => r.text === reminder.text);
@@ -77,7 +85,10 @@ export class CalendarService implements OnInit {
       remindersArr.push(reminder);
     }
 
-    remindersMap.set(reminder.dateTime.toDateString(), remindersArr);
+    remindersMap.set(
+      reminder.dateTime.toISOString().split('T')[0],
+      remindersArr,
+    );
     this.reminders.next(remindersMap);
     this.notification.next({
       body: `Reminder ${edit ? 'edited' : 'created'}!!!`,
@@ -106,20 +117,26 @@ export class CalendarService implements OnInit {
 
   public updateRemindersWeather() {
     let remindersMap = this.reminders.getValue();
+    let updateObservables = [];
+
     for (let [key, value] of remindersMap.entries()) {
       let remindersArr = value;
       for (let i = 0; i < remindersArr.length; i++) {
         let reminder = remindersArr[i];
         if (reminder.city && !reminder.weather) {
-          this.apiService
+          let $update = this.apiService
             .getWeatherInformation(reminder.city as City, reminder.dateTime)
             .subscribe((weather) => {
               reminder.weather = weather?.temp;
             });
+          updateObservables.push(remindersArr);
         }
         remindersArr[i] = reminder;
       }
     }
-    this.reminders.next(remindersMap);
+
+    if (updateObservables.length > 0) {
+      forkJoin(updateObservables).subscribe((updatedReminders) => {});
+    }
   }
 }

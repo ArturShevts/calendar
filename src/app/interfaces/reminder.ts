@@ -32,7 +32,7 @@ export const mockReminders: ReminderMap = new Map(
     const date2 = new Date(2025, 2, i === 0 ? 4 : 26);
     const date3 = new Date(2025, 2, i === 0 ? 4 : 26);
     return [
-      date.toDateString(),
+      date.toISOString().split('T')[0],
       [
         {
           text: `ＷＩＤＥＳＴ　ＣＨＡＲＡＣＴＥＲＳ　３０`,
