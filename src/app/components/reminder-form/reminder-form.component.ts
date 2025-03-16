@@ -81,7 +81,9 @@ export class ReminderFormComponent implements OnInit {
     return;
   }
 
-  handleInputChange() {}
+  canSubmit() {
+    return this.reminderFormGroup.valid || !this.reminderFormGroup.pristine;
+  }
 
   protected readonly colors = colors;
 }
