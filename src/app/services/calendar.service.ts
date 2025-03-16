@@ -13,9 +13,9 @@ import {
   startWith,
   Subject,
 } from 'rxjs';
-import { City, mockReminders, Reminder } from '../interfaces/reminder';
-import { ApiService } from './api.service';
+import { Reminder } from '../interfaces/reminder';
 import { WeatherService } from './weather.service';
+import { mockReminders } from '../mocks/reminder';
 
 export type ReminderMap = Map<string, Reminder>;
 

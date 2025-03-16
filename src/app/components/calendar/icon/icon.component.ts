@@ -1,4 +1,10 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  Input,
+  OnInit,
+} from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { DomSanitizer } from '@angular/platform-browser';
 import { WeatherIcons } from '../../../interfaces/weather.model';

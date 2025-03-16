@@ -10,8 +10,7 @@
 .reminder-item {
   min-height: 24px;
   white-space: normal; /* Allow text to wrap */
-
-  display: flex;
+   display: flex;
   gap: 6px;
   padding: 2px 2px 2px 0;
   font-size: 0.75rem;
@@ -23,7 +22,9 @@
 }
 
 .reminder-content {
-    overflow-x: hidden;
+  width: 100%;
+
+  overflow-x: hidden;
   text-wrap:wrap ;
   text-overflow: ellipsis;
   font-weight: 500;
@@ -40,7 +41,7 @@
   border-bottom-left-radius: 4px;
 }
 .icon {
-  margin-left: -10px;
+  margin-left: -2px;
 
 }
 

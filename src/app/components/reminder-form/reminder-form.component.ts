@@ -5,11 +5,7 @@ import {
   Inject,
   OnInit,
 } from '@angular/core';
-import {
-  MAT_DIALOG_DATA,
-  MatDialog,
-  MatDialogRef,
-} from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Cities, colors, Reminder } from '../../interfaces/reminder';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { CalendarService } from '../../services/calendar.service';
@@ -68,6 +64,7 @@ export class ReminderFormComponent implements OnInit {
       dateTime: formData.newTime,
       city: formData.city,
       color: formData.color,
+      weather: this.data.reminder.weather,
     };
 
     if (this.data.id) {

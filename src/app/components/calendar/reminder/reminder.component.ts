@@ -1,9 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  Input,
-} from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { Reminder } from '../../../interfaces/reminder';
 import { ReminderFormComponent } from '../../reminder-form/reminder-form.component';
 import { MatDialog } from '@angular/material/dialog';
