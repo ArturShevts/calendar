@@ -5,32 +5,32 @@
     </button>
     <span>Jobsity challenge</span>
     <span class="spacer"></span>
-    <button mat-button (click)="openReminderForm(vm.selectedDate)">
+    <button mat-button (click)="openReminderForm()">
       <mat-icon>add</mat-icon> New reminder
     </button>
   </mat-toolbar>
 
-  <div class="year-select">
-    <button mat-icon-button (click)="changeYear(-1)">
-      <mat-icon>keyboard_arrow_left</mat-icon>
-    </button>
-    <div class="title-year">{{ vm.selectedDate.getFullYear() }}</div>
-    <button mat-icon-button (click)="changeYear(1)">
-      <mat-icon>keyboard_arrow_right</mat-icon>
-    </button>
-  </div>
+<!--  <div class="year-select">-->
+<!--    <button mat-icon-button (click)="changeYear(-1)">-->
+<!--      <mat-icon>keyboard_arrow_left</mat-icon>-->
+<!--    </button>-->
+<!--    <div class="title-year">{{ vm.selectedDate.getFullYear() }}</div>-->
+<!--    <button mat-icon-button (click)="changeYear(1)">-->
+<!--      <mat-icon>keyboard_arrow_right</mat-icon>-->
+<!--    </button>-->
+<!--  </div>-->
 
-  <div class="month-select">
-    <button mat-icon-button (click)="changeMonth(-1)">
-      <mat-icon>keyboard_arrow_left</mat-icon>
-    </button>
-    <div class="title-month">
-      {{ vm.selectedDate.toLocaleString('default', { month: 'long' }) }}
-    </div>
-    <button mat-icon-button (click)="changeMonth(1)">
-      <mat-icon>keyboard_arrow_right</mat-icon>
-    </button>
-  </div>
+<!--  <div class="month-select">-->
+<!--    <button mat-icon-button (click)="changeMonth(-1)">-->
+<!--      <mat-icon>keyboard_arrow_left</mat-icon>-->
+<!--    </button>-->
+<!--    <div class="title-month">-->
+<!--      {{ vm.selectedDate.toLocaleString('default', { month: 'long' }) }}-->
+<!--    </div>-->
+<!--    <button mat-icon-button (click)="changeMonth(1)">-->
+<!--      <mat-icon>keyboard_arrow_right</mat-icon>-->
+<!--    </button>-->
+<!--  </div>-->
 
   <div class="calendar">
     <div class="calendar-header">
@@ -46,7 +46,7 @@
     <div class="calendar-body">
       <div
         class="calendar-cell"
-        *ngFor="let day of calenderData"
+        *ngFor="let day of vm.days"
 
         [class.selected]="day.selected"
         [class.current]="day.current"
@@ -63,7 +63,7 @@
           {{ day.date.getDate() }}
         </div>
 
-     <app-reminder [reminders]=" vm.reminders.get(day.date.toISOString().split('T')[0])">
+     <app-reminder [reminders]="day.reminders">
 
      </app-reminder>
       </div>

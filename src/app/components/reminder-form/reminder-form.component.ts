@@ -21,13 +21,15 @@ export class ReminderFormComponent implements OnInit {
 
   calendarService = inject(CalendarService);
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: { date: Date; reminder: Reminder },
+    @Inject(MAT_DIALOG_DATA)
+    public data: { reminder: Reminder; id?: string },
   ) {}
 
   reminderFormGroup?: FormGroup;
   ngOnInit(): void {
+    console.log(this.data);
     let reminder = this.data.reminder;
-    let date = this.data.date;
+    let date = reminder ? reminder.dateTime : new Date();
 
     if (reminder) {
       this.reminderFormGroup = new FormGroup({
@@ -62,15 +64,14 @@ export class ReminderFormComponent implements OnInit {
 
     let formData = this.reminderFormGroup.value;
     let newReminder: Reminder = {
-      id: this.data.reminder?.id || '_' + Math.random().toString(36),
       text: formData.text,
       dateTime: formData.newTime,
       city: formData.city,
       color: formData.color,
     };
 
-    if (this.data.reminder) {
-      this.calendarService.edit(newReminder);
+    if (this.data.id) {
+      this.calendarService.edit(newReminder, this.data.id);
     } else {
       this.calendarService.create(newReminder);
     }

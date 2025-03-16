@@ -34,7 +34,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 
 export interface Day {
   date: Date;
-  reminders: Reminder[];
+  reminders: { id: string; reminder: Reminder }[];
   weather: any;
   display: boolean;
   selected: boolean;
@@ -56,68 +56,68 @@ export const MonthsMap = {
 };
 
 @Component({
-    selector: 'app-calendar',
-    templateUrl: './calendar.component.html',
-    styleUrls: ['./calendar.component.scss'],
-    standalone: false
+  selector: 'app-calendar',
+  templateUrl: './calendar.component.html',
+  styleUrls: ['./calendar.component.scss'],
+  standalone: false,
 })
 export class CalendarComponent implements OnInit {
   private snackBar = inject(MatSnackBar);
   private calendarService = inject(CalendarService);
-  private weatherService = inject(WeatherService);
   private matDialog = inject(MatDialog);
 
-  public calenderData: Day[] = [];
   public selectedDate = new BehaviorSubject<Date>(new Date());
 
   public $vm: Observable<{
-    selectedDate: Date;
+    days: Day[];
     notification: Notification;
-    reminders: ReminderMap;
   }> = combineLatest([
+    // convert to selected month
     this.selectedDate.asObservable().pipe(
       distinctUntilChanged(),
-      tap((selectedDate: Date) => this.fillCalendar(selectedDate)),
+      map((selectedDate: Date) => this.fillCalendar(selectedDate)),
     ),
     this.calendarService.$notification.pipe(
       startWith({ body: 'Welcome!', error: false }),
       tap((notification) => this.openNotification(notification)),
     ),
     this.calendarService.$reminders.pipe(
-      // map((reminders) => Array.from(reminders.values())),
       tap((reminders) => {
         console.log('reminders', reminders);
       }),
     ),
   ]).pipe(
-    map(([selectedDate, notifications, reminders]) => ({
-      selectedDate,
-      notification: notifications,
-      reminders,
-    })),
+    map(([days, notifications, reminders]) => {
+      for (const day of days) {
+        day.reminders = Array.from(reminders.entries()).reduce(
+          (acc, [id, reminder]) => {
+            if (reminder.dateTime.toDateString() === day.date.toDateString()) {
+              acc.push({ id, reminder });
+            }
+            return acc;
+          },
+          [] as { id: string; reminder: Reminder }[],
+        );
+      }
+      console.log(days);
+
+      return {
+        days: days,
+        notification: notifications,
+      };
+    }),
   );
 
   ngOnInit(): void {
     this.calendarService.updateRemindersWeather();
   }
 
-  getWeather(city: string) {
-    // const x = this.weatherService.getWeatherInformation(city, date);
-    // console.log(x);
-    // return x;
-  }
-
-  openReminderForm(date: Date, reminder?: Reminder) {
+  openReminderForm(reminder?: Reminder) {
     this.matDialog.open(ReminderFormComponent, {
       data: {
-        date,
         reminder,
       },
     });
-  }
-
-  getReminders(date: Date) {
-    return;
   }
 
   openNotification(notification: Notification) {
@@ -147,11 +147,6 @@ export class CalendarComponent implements OnInit {
       firstDayMonth.getDate() - firstDayMonth.getDay(),
     );
 
-    let firstSatOfNextMonth = new Date(
-      selectedDate.getFullYear(),
-      selectedDate.getMonth() + 1,
-      1,
-    );
     let days: Day[] = [];
     for (let i = 0; i < 42; i++) {
       // NOTE: small chance that feb 1st is a Sunday, in which case we only need to display 28 days
@@ -175,8 +170,8 @@ export class CalendarComponent implements OnInit {
 
       days.push(newDay);
     }
-    this.calenderData = days;
-    console.log(days);
+    days;
+    return days;
   }
 
   // year and month select

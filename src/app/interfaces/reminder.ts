@@ -1,7 +1,6 @@
 import { ReminderMap } from '../services/calendar.service';
 
 export interface Reminder {
-  id: string;
   text: string;
   dateTime: Date;
   color: string;
@@ -26,25 +25,33 @@ export const Cities: City[] = [
   'Paris',
 ];
 
-//  generate reminders for march 4 and 26 2025
 export const mockReminders: ReminderMap = new Map(
-  Array.from({ length: 2 }, (_, i) => {
-    const date = new Date(2025, 2, i === 0 ? 4 : 26);
-    const date2 = new Date(2025, 2, i === 0 ? 4 : 26);
-    const date3 = new Date(2025, 2, i === 0 ? 4 : 26);
-    return [
-      date.toISOString().split('T')[0],
-      [
-        {
-          id: '123',
-          text: `ＷＩＤＥＳＴ　ＣＨＡＲＷＩＤＥＳＴ　ＣＨＡＲＡＣＴＥＲＳ　３０`,
-          dateTime: date,
-          color: 'red',
-          city: 'Helsinki',
-        },
-      ],
-    ];
-  }),
+  [
+    {
+      text: 'Meeting with team',
+      dateTime: new Date('2025-03-04T10:00:00'),
+      color: 'red',
+      city: 'Helsinki',
+    },
+    {
+      text: 'Doctor appointment',
+      dateTime: new Date('2025-03-04T15:00:00'),
+      color: 'blue',
+      city: 'Kyoto',
+    },
+    {
+      text: 'Lunch with friend',
+      dateTime: new Date('2025-03-26T12:00:00'),
+      color: 'green',
+      city: 'London',
+    },
+    {
+      text: 'Gym session',
+      dateTime: new Date('2025-03-26T18:00:00'),
+      color: 'yellow',
+      city: 'Paris',
+    },
+  ].map((reminder, index) => [index.toString(), reminder]),
 );
 
 export const colors = [

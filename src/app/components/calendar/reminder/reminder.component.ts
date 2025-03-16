@@ -9,27 +9,26 @@ import { ReminderFormComponent } from '../../reminder-form/reminder-form.compone
 import { MatDialog } from '@angular/material/dialog';
 
 @Component({
-    selector: 'app-reminder',
-    // standalone: true,
-    templateUrl: './reminder.component.html',
-    styleUrl: './reminder.component.scss',
-    standalone: false
+  selector: 'app-reminder',
+  // standalone: true,
+  templateUrl: './reminder.component.html',
+  styleUrl: './reminder.component.scss',
+  standalone: false,
 })
 export class ReminderComponent {
-  @Input() reminders: Reminder[] | undefined = [];
+  @Input() reminders: { id: string; reminder: Reminder }[] | undefined = [];
   private matDialog = inject(MatDialog);
 
   constructor() {
     this.reminders?.sort(
-      (a: Reminder, b: Reminder) => a.dateTime.getTime() - b.dateTime.getTime(),
+      (a, b) => a.reminder.dateTime.getTime() - b.reminder.dateTime.getTime(),
     );
   }
 
-  openReminderForm(date: Date, reminder: Reminder) {
-    console.log('Open!!!!!!!!!!!', date, reminder);
+  openReminderForm(id: string, reminder: Reminder) {
     this.matDialog.open(ReminderFormComponent, {
       data: {
-        date,
+        id,
         reminder,
       },
     });
