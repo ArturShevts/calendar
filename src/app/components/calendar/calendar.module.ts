@@ -18,9 +18,6 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     CalendarRoutingModule,
     SharedModule,
     ReminderFormModule,
-    MatDialogModule,
-    FormsModule,
-    MatTooltipModule,
   ],
 })
 export class CalendarModule {}

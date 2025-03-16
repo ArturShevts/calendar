@@ -37,36 +37,19 @@ export const mockReminders: ReminderMap = new Map(
       [
         {
           id: '123',
-          text: `ＷＩＤＥＳＴ　ＣＨＡＲＡＣＴＥＲＳ　３０`,
+          text: `ＷＩＤＥＳＴ　ＣＨＡＲＷＩＤＥＳＴ　ＣＨＡＲＡＣＴＥＲＳ　３０`,
           dateTime: date,
           color: 'red',
           city: 'Helsinki',
-        },
-
-        {
-          id: '124',
-
-          text: `abcdefghijklmnopqrstuvwxyzABCD`,
-          dateTime: date2,
-          color: 'blue',
-          city: 'Kyoto',
-        },
-        {
-          id: '125',
-
-          text: `abcdefg hijlmnopq rstuvwxyzABCD`,
-          dateTime: date3,
-          color: 'blue',
-          city: 'London',
-        },
-        {
-          id: '126',
-
-          text: `walk the plank`,
-          dateTime: date3,
-          color: 'blue',
         },
       ],
     ];
   }),
 );
+
+export const colors = [
+  { name: 'Red', value: 'red' },
+  { name: 'Green', value: 'green' },
+  { name: 'Yellow', value: 'yellow' },
+  { name: 'Blue', value: 'blue' },
+];
