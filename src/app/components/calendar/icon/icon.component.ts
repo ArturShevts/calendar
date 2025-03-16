@@ -4,9 +4,10 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { WeatherIcons } from '../../../interfaces/weather.model';
 import { catchError, throwError } from 'rxjs';
 @Component({
-  selector: 'app-icon',
-  templateUrl: './icon.component.html',
-  styleUrl: './icon.component.scss',
+    selector: 'app-icon',
+    templateUrl: './icon.component.html',
+    styleUrl: './icon.component.scss',
+    standalone: false
 })
 export class IconComponent implements OnInit {
   @Input() iconData!: { temp: number; icon: string; dateTime: string };

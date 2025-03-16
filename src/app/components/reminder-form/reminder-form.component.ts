@@ -9,9 +9,10 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { CalendarService } from '../../services/calendar.service';
 
 @Component({
-  selector: 'app-reminder-form',
-  templateUrl: './reminder-form.component.html',
-  styleUrls: ['./reminder-form.component.scss'],
+    selector: 'app-reminder-form',
+    templateUrl: './reminder-form.component.html',
+    styleUrls: ['./reminder-form.component.scss'],
+    standalone: false
 })
 export class ReminderFormComponent implements OnInit {
   private dialogRef = inject(MatDialogRef<ReminderFormComponent>);

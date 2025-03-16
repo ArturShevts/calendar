@@ -56,10 +56,10 @@ export const MonthsMap = {
 };
 
 @Component({
-  selector: 'app-calendar',
-  templateUrl: './calendar.component.html',
-  styleUrls: ['./calendar.component.scss'],
-  // changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-calendar',
+    templateUrl: './calendar.component.html',
+    styleUrls: ['./calendar.component.scss'],
+    standalone: false
 })
 export class CalendarComponent implements OnInit {
   private snackBar = inject(MatSnackBar);

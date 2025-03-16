@@ -9,11 +9,11 @@ import { ReminderFormComponent } from '../../reminder-form/reminder-form.compone
 import { MatDialog } from '@angular/material/dialog';
 
 @Component({
-  selector: 'app-reminder',
-  // standalone: true,
-  templateUrl: './reminder.component.html',
-  styleUrl: './reminder.component.scss',
-  // changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-reminder',
+    // standalone: true,
+    templateUrl: './reminder.component.html',
+    styleUrl: './reminder.component.scss',
+    standalone: false
 })
 export class ReminderComponent {
   @Input() reminders: Reminder[] | undefined = [];
