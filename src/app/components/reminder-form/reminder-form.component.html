@@ -28,7 +28,7 @@
       <div class="inline-field-wrapper">
 
       <mat-form-field>
-        <mat-label>Meeting date</mat-label>
+        <mat-label>Reminder date</mat-label>
         <input
           matInput
           [matDatepicker]="datepicker"
@@ -37,10 +37,21 @@
          />
         <mat-datepicker #datepicker />
         <mat-datepicker-toggle [for]="datepicker" matSuffix />
+        <mat-error
+          *ngIf="reminderFormGroup.get('newTime')?.hasError('required')"
+        >
+          Date is required
+        </mat-error>
+        <mat-error
+          *ngIf="reminderFormGroup.get('newTime')?.hasError('invalidDate')"
+        >
+           Choose a future Date
+        </mat-error>
+
       </mat-form-field>
 
       <mat-form-field >
-        <mat-label>Meeting time</mat-label>
+        <mat-label>Reminder time</mat-label>
         <input
           matInput
           [matTimepicker]="timepicker"
@@ -50,6 +61,11 @@
          />
         <mat-timepicker #timepicker />
         <mat-timepicker-toggle [for]="timepicker" matSuffix />
+        <mat-error
+          *ngIf="reminderFormGroup.get('newTime')?.hasError('required')"
+        >
+          Time is required
+        </mat-error>
       </mat-form-field>
       </div>
 
@@ -96,7 +112,7 @@
       mat-raised-button
       color="primary"
       type="submit"
-      [disabled]="!canSubmit"
+      [disabled]="!reminderFormGroup.valid && reminderFormGroup.pristine"
     >
       Save
     </button>

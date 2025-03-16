@@ -9,6 +9,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Cities, colors, Reminder } from '../../interfaces/reminder';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { CalendarService } from '../../services/calendar.service';
+import { futureDateValidator } from '../../validators/date.validator';
 
 @Component({
   selector: 'app-reminder-form',
@@ -29,7 +30,7 @@ export class ReminderFormComponent implements OnInit {
   reminderFormGroup: FormGroup = new FormGroup({});
   textControl = new FormControl('', Validators.required);
   newTimeControl = new FormControl(new Date(), {
-    validators: [Validators.required],
+    validators: [Validators.required, futureDateValidator()],
     updateOn: 'blur',
   });
   cityControl = new FormControl('', Validators.required);
@@ -64,7 +65,7 @@ export class ReminderFormComponent implements OnInit {
       dateTime: formData.newTime,
       city: formData.city,
       color: formData.color,
-      weather: this.data.reminder.weather,
+      weather: this.data.reminder?.weather,
     };
 
     if (this.data.id) {
@@ -76,10 +77,6 @@ export class ReminderFormComponent implements OnInit {
     this.reminderFormGroup.reset();
     this.dialogRef.close();
     return;
-  }
-
-  canSubmit() {
-    return this.reminderFormGroup.valid || !this.reminderFormGroup.pristine;
   }
 
   protected readonly colors = colors;
