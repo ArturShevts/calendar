@@ -45,3 +45,14 @@ export const mockReminders: ReminderMap = new Map(
     } as Reminder,
   ].map((reminder, index) => [index.toString(), reminder]),
 );
+
+export const mockReminder: Reminder = {
+  text: 'Sample Reminder',
+  dateTime: new Date(),
+  color: 'blue',
+  city: 'Kyoto',
+  weather: {
+    temperature: 25,
+    condition: 'Sunny',
+  },
+};
