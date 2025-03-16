@@ -105,18 +105,21 @@ export class CalendarService implements OnInit {
   }
 
   public updateRemindersWeather() {
-    console.log('Updating reminders weather service');
     let remindersMap = this.reminders.getValue();
-    let remindersArr = Array.from(remindersMap.values()).flat();
-    console.log(remindersArr);
-    remindersArr.forEach((reminder) => {
-      console.log('reminder', reminder);
-      if (reminder.city) {
-        console.log('fetching weather for', reminder.city);
-        this.apiService
-          .getWeatherInformation(reminder.city as City, reminder.dateTime)
-          .subscribe();
+    for (let [key, value] of remindersMap.entries()) {
+      let remindersArr = value;
+      for (let i = 0; i < remindersArr.length; i++) {
+        let reminder = remindersArr[i];
+        if (reminder.city && !reminder.weather) {
+          this.apiService
+            .getWeatherInformation(reminder.city as City, reminder.dateTime)
+            .subscribe((weather) => {
+              reminder.weather = weather?.temp;
+            });
+        }
+        remindersArr[i] = reminder;
       }
-    });
+    }
+    this.reminders.next(remindersMap);
   }
 }
