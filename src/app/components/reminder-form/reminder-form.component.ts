@@ -9,10 +9,10 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { CalendarService } from '../../services/calendar.service';
 
 @Component({
-    selector: 'app-reminder-form',
-    templateUrl: './reminder-form.component.html',
-    styleUrls: ['./reminder-form.component.scss'],
-    standalone: false
+  selector: 'app-reminder-form',
+  templateUrl: './reminder-form.component.html',
+  styleUrls: ['./reminder-form.component.scss'],
+  standalone: false,
 })
 export class ReminderFormComponent implements OnInit {
   private dialogRef = inject(MatDialogRef<ReminderFormComponent>);
@@ -32,16 +32,21 @@ export class ReminderFormComponent implements OnInit {
     if (reminder) {
       this.reminderFormGroup = new FormGroup({
         text: new FormControl(reminder.text, Validators.required),
-        date: new FormControl(reminder.dateTime, Validators.required),
-        time: new FormControl(reminder.dateTime, Validators.required), // Not required for all day events
+        // date: new FormControl(reminder.dateTime, Validators.required),
+        // time: new FormControl(reminder.dateTime, Validators.required),
+        newTime: new FormControl(
+          new Date(reminder.dateTime),
+          Validators.required,
+        ),
         city: new FormControl(reminder.city),
         color: new FormControl(reminder.color, Validators.required),
       });
     } else {
       this.reminderFormGroup = new FormGroup({
         text: new FormControl('', Validators.required),
-        date: new FormControl(date, Validators.required),
-        time: new FormControl(date.getTime(), Validators.required), // Not required for all day events
+        // date: new FormControl(date, Validators.required),
+        // time: new FormControl(date.getTime(), Validators.required), // Not required for all day events
+        newTime: new FormControl(date.getTime(), Validators.required),
         city: new FormControl('', Validators.required),
         color: new FormControl('', Validators.required),
       });
@@ -59,7 +64,7 @@ export class ReminderFormComponent implements OnInit {
     let newReminder: Reminder = {
       id: this.data.reminder?.id || '_' + Math.random().toString(36),
       text: formData.text,
-      dateTime: new Date(this.makeDate(formData.date, formData.time)),
+      dateTime: formData.newTime,
       city: formData.city,
       color: formData.color,
     };
@@ -73,18 +78,6 @@ export class ReminderFormComponent implements OnInit {
     this.reminderFormGroup.reset();
     this.dialogRef.close();
     return;
-  }
-
-  makeDate(date: string, time: string): Date {
-    let d = new Date(date);
-    let t = new Date(time);
-    d.setHours(
-      t.getHours(),
-      t.getMinutes(),
-      t.getSeconds(),
-      t.getMilliseconds(),
-    );
-    return d;
   }
 
   protected readonly colors = colors;

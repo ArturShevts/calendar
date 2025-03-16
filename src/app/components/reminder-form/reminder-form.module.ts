@@ -10,7 +10,11 @@ import {
   MatHint,
   MatLabel,
 } from '@angular/material/form-field';
-import { MatNativeDateModule, MatOption } from '@angular/material/core';
+import {
+  MatNativeDateModule,
+  MatOption,
+  provideNativeDateAdapter,
+} from '@angular/material/core';
 import { MatSelect, MatSelectModule } from '@angular/material/select';
 import { MatButton, MatButtonModule } from '@angular/material/button';
 import { MatInput, MatInputModule } from '@angular/material/input';
@@ -22,6 +26,12 @@ import {
   MatDatepickerToggle,
 } from '@angular/material/datepicker';
 import { MatRadioButton, MatRadioGroup } from '@angular/material/radio';
+import {
+  MatTimepicker,
+  MatTimepickerInput,
+  MatTimepickerToggle,
+} from '@angular/material/timepicker';
+import { MatIcon } from '@angular/material/icon';
 
 @NgModule({
   declarations: [ReminderFormComponent],
@@ -38,7 +48,11 @@ import { MatRadioButton, MatRadioGroup } from '@angular/material/radio';
     MatNativeDateModule,
     MatRadioGroup,
     MatRadioButton,
+    MatTimepickerToggle,
+    MatIcon,
+    MatTimepicker,
+    MatTimepickerInput,
   ],
-  providers: [MatDatepickerModule],
+  providers: [MatDatepickerModule, provideNativeDateAdapter()],
 })
 export class ReminderFormModule {}
