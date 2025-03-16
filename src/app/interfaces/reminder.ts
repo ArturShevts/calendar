@@ -17,14 +17,14 @@ export type City =
   | 'Oslo'
   | 'Paris';
 
-export const Cities: Record<City, City> = {
-  Helsinki: 'Helsinki',
-  Kyoto: 'Kyoto',
-  London: 'London',
-  Moscow: 'Moscow',
-  Oslo: 'Oslo',
-  Paris: 'Paris',
-};
+export const Cities: City[] = [
+  'Helsinki',
+  'Kyoto',
+  'London',
+  'Moscow',
+  'Oslo',
+  'Paris',
+];
 
 //  generate reminders for march 4 and 26 2025
 export const mockReminders: ReminderMap = new Map(

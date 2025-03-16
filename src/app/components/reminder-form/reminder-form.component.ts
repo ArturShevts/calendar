@@ -1,6 +1,10 @@
 import { Component, inject, Inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Reminder } from '../../interfaces/reminder';
+import {
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogRef,
+} from '@angular/material/dialog';
+import { Cities, Reminder } from '../../interfaces/reminder';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { CalendarService } from '../../services/calendar.service';
 
@@ -10,6 +14,9 @@ import { CalendarService } from '../../services/calendar.service';
   styleUrls: ['./reminder-form.component.scss'],
 })
 export class ReminderFormComponent implements OnInit {
+  private dialogRef = inject(MatDialogRef<ReminderFormComponent>);
+
+  cities = Cities;
   colors = [
     { name: 'Red', value: 'red' },
     { name: 'Green', value: 'green' },
@@ -67,7 +74,7 @@ export class ReminderFormComponent implements OnInit {
     }
 
     this.reminderFormGroup.reset();
-
+    this.dialogRef.close();
     return;
   }
 
