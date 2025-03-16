@@ -1,7 +1,6 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  inject,
   Inject,
   OnInit,
 } from '@angular/core';
@@ -19,48 +18,56 @@ import { futureDateValidator } from '../../validators/date.validator';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ReminderFormComponent implements OnInit {
-  private dialogRef = inject(MatDialogRef<ReminderFormComponent>);
-  cities = Cities;
-  calendarService = inject(CalendarService);
+  reminderFormGroup: FormGroup;
+  textControl: FormControl;
+  newTimeControl: FormControl;
+  cityControl: FormControl;
+  colorControl: FormControl;
+  protected readonly colors = colors;
+  protected readonly cities = Cities;
+
   constructor(
-    @Inject(MAT_DIALOG_DATA)
-    public data: { reminder: Reminder; id?: string },
-  ) {}
+    private dialogRef: MatDialogRef<ReminderFormComponent>,
+    private calendarService: CalendarService,
+    @Inject(MAT_DIALOG_DATA) public data: { reminder: Reminder; id?: string },
+  ) {
+    this.textControl = new FormControl('', Validators.required);
+    this.newTimeControl = new FormControl(new Date(), {
+      validators: [Validators.required, futureDateValidator()],
+      updateOn: 'blur',
+    });
+    this.cityControl = new FormControl('', Validators.required);
+    this.colorControl = new FormControl('', Validators.required);
 
-  reminderFormGroup: FormGroup = new FormGroup({});
-  textControl = new FormControl('', Validators.required);
-  newTimeControl = new FormControl(new Date(), {
-    validators: [Validators.required, futureDateValidator()],
-    updateOn: 'blur',
-  });
-  cityControl = new FormControl('', Validators.required);
-  colorControl = new FormControl('', Validators.required);
-
-  ngOnInit(): void {
-    let reminder = this.data.reminder;
-
-    if (reminder) {
-      this.textControl.setValue(reminder.text);
-      this.newTimeControl.setValue(new Date(reminder.dateTime));
-      this.cityControl.setValue(reminder.city);
-      this.colorControl.setValue(reminder.color);
-    }
-
-    this.reminderFormGroup.addControl('text', this.textControl);
-    this.reminderFormGroup.addControl('newTime', this.newTimeControl);
-    this.reminderFormGroup.addControl('city', this.cityControl);
-    this.reminderFormGroup.addControl('color', this.colorControl);
+    this.reminderFormGroup = new FormGroup({
+      text: this.textControl,
+      newTime: this.newTimeControl,
+      city: this.cityControl,
+      color: this.colorControl,
+    });
   }
 
-  onSubmit() {
-    if (!this.reminderFormGroup) {
-      console.error('Form is not initialized');
+  ngOnInit(): void {
+    if (this.data.reminder) {
+      this.setFormValues(this.data.reminder);
+    }
+  }
+
+  private setFormValues(reminder: Reminder): void {
+    this.textControl.setValue(reminder.text);
+    this.newTimeControl.setValue(new Date(reminder.dateTime));
+    this.cityControl.setValue(reminder.city);
+    this.colorControl.setValue(reminder.color);
+  }
+
+  onSubmit(): void {
+    if (this.reminderFormGroup.invalid) {
+      this.reminderFormGroup.markAllAsTouched();
       return;
     }
-    this.reminderFormGroup.markAsTouched();
 
-    let formData = this.reminderFormGroup.value;
-    let newReminder: Reminder = {
+    const formData = this.reminderFormGroup.value;
+    const newReminder: Reminder = {
       text: formData.text,
       dateTime: formData.newTime,
       city: formData.city,
@@ -76,8 +83,5 @@ export class ReminderFormComponent implements OnInit {
 
     this.reminderFormGroup.reset();
     this.dialogRef.close();
-    return;
   }
-
-  protected readonly colors = colors;
 }
