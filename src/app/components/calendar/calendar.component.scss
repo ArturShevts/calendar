@@ -1,93 +1,120 @@
-.spacer {
-  flex: 1 1 auto;
-}
+$accent: #2e75b5;
+  $background: #fefffe;
+$bg-accent: #dfe4f3;
+  $bg-secondary: #f2f2f2;
+  $secondary: #8e8e8e;
 
-.year-select{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 10px;
-   .title-year {
-    font-size: 2.5em;
-     width: 150px;
-     text-align: center;
-
-   }
-}
-.month-select{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 10px;
-  .title-month {
-    font-size: 1.5em;
-    width: 150px;
-     text-align: center;
-  }
-}
-.calendar {
-  max-width: 1400px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-rows: auto 1fr;
-  width: 100%;
-
-  .calendar-header {
-    text-align: center;
-     align-items: center;
-    display: grid;
-    height: 40px;
-    grid-template-columns: repeat(7, 1fr);
-    background-color: lightsteelblue;
-    font-weight: bold;
+  .spacer {
+    flex: 1 1 auto;
   }
 
-  .calendar-body {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    grid-auto-rows: minmax(150px, auto);
-  }
+  .year-select {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
 
-  .calendar-cell {
-    width: 200px;
-    height: 150px;
-    overflow-y: scroll;
-    border: 1px solid #ccc;
-
-
-    scrollbar-width: none; /* For Firefox */
-    -ms-overflow-style: none;  /* For Internet Explorer and Edge */
-    ::-webkit-scrollbar {
-      display: none; /* For Chrome, Safari, and Opera */
+    .title-year {
+      font-size: 2.5em;
+      width: 150px;
+      text-align: center;
     }
-     .cell-date {
-       cursor: pointer;
-      background-color: white;
-      z-index: 1;
-      width: 30px;
-      border-radius: 0 2px 24px 2px;
-      height: 24px;
+  }
 
-      position: absolute;
+  .month-select {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+
+    .title-month {
+      font-size: 1.5em;
+      width: 150px;
+      text-align: center;
+    }
+  }
+
+  .calendar {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-rows: auto 1fr;
+    width: 100%;
+    font-family: Arial, sans-serif;
+    .calendar-header {
+      color: $background;
+
+      text-align: center;
+      align-items: center;
+      display: grid;
+      height: 40px;
+      grid-template-columns: repeat(7, 1fr);
+      background-color: $accent;
       font-weight: bold;
-      text-align: left;
-      padding-left: 8px;
-    }
-    .hidden {
-      color: grey;
-    }
-    .weekend{
-      color:blue;
+      font-size: 1.5em;
+
     }
 
-  }
-  .selected {
-     outline: 2px solid lightblue;
-    border: 1px solid lightblue;
+    .calendar-body {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      grid-auto-rows: minmax(150px, auto);
+    }
+
+    .calendar-cell {
+      width: 200px;
+      height: 150px;
+      overflow-y: scroll;
+      border: 1px solid $secondary;
+      scrollbar-width: none; /* For Firefox */
+      -ms-overflow-style: none; /* For Internet Explorer and Edge */
+      ::-webkit-scrollbar {
+        display: none; /* For Chrome, Safari, and Opera */
+      }
+
+
+      .cell-date {
+        cursor: pointer;
+        background-color: white;
+        z-index: 1;
+        width: 30px;
+        border-radius: 0 2px 24px 2px;
+        height: 24px;
+        position: absolute;
+        font-weight: bold;
+        text-align: left;
+        padding-left: 8px;
+      }
+
+
+      &.selected{
+        border-color: $accent;
+        outline: 2px solid $accent;
+        outline-offset: -2px;
+
+      }
+      &.hidden{
+        .cell-date {
+          color: $secondary;
+        }
+       }
+
+      &.weekend{
+        .cell-date {
+          color: $accent;
+          background-color: $bg-secondary;
+        }
+        background-color: $bg-secondary;
+      }
+      &.current{
+        .cell-date {
+          color: $accent;
+        }
+        background-color: $bg-accent;
+      }
+
+
+    }
+
 
   }
-  .current {
-    background-color: lightcyan;
-  }
-
-}

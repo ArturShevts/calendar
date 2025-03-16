@@ -50,15 +50,15 @@
 
         [class.selected]="day.selected"
         [class.current]="day.current"
+        [class.weekend]="
+            (day.date.getDay() === 0 || day.date.getDay() === 6)
+
+          "
+        [class.hidden]="!day.display"
       >
         <div
           (click)="selectDate(day.date)"
           class="cell-date"
-          [class.weekend]="
-            (day.date.getDay() === 0 || day.date.getDay() === 6)
-            && day.display
-          "
-          [class.hidden]="!day.display"
         >
           {{ day.date.getDate() }}
         </div>
