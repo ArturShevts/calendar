@@ -1,4 +1,4 @@
-<div *ngIf="$vm | async as vm" >
+<div *ngIf="$vm | async as vm">
   <mat-toolbar class="app-navbar">
     <button mat-icon-button>
       <mat-icon>menu</mat-icon>
@@ -34,38 +34,28 @@
 
   <div class="calendar">
     <div class="calendar-header">
-      <span >Sunday</span>
-      <span >Monday</span>
-      <span >Tuesday</span>
-      <span >Wednesday</span>
-      <span >Thursday</span>
-      <span >Friday</span>
-      <span >Saturday</span>
-
+      <span>Sunday</span>
+      <span>Monday</span>
+      <span>Tuesday</span>
+      <span>Wednesday</span>
+      <span>Thursday</span>
+      <span>Friday</span>
+      <span>Saturday</span>
     </div>
     <div class="calendar-body">
       <div
         class="calendar-cell"
         *ngFor="let day of vm.days"
-
         [class.selected]="day.selected"
         [class.current]="day.current"
-        [class.weekend]="
-            (day.date.getDay() === 0 || day.date.getDay() === 6)
-
-          "
+        [class.weekend]="day.date.getDay() === 0 || day.date.getDay() === 6"
         [class.hidden]="!day.display"
       >
-        <div
-          (click)="selectDate(day.date)"
-          class="cell-date"
-        >
+        <div (click)="selectDate(day.date)" class="cell-date">
           {{ day.date.getDate() }}
         </div>
 
-     <app-reminder [reminders]="day.reminders">
-
-     </app-reminder>
+        <app-reminder [reminders]="day.reminders"> </app-reminder>
       </div>
     </div>
   </div>

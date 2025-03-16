@@ -8,7 +8,8 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test --include=**/reminder-form.component.spec.ts",
-    "lint": "ng lint --fix "
+    "lint": "ng lint --fix ",
+    "format": "npx prettier --write '**/*.{ts,js,scss,html,json}'"
   },
   "private": true,
   "dependencies": {

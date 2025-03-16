@@ -8,9 +8,8 @@ describe('ReminderComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ReminderComponent]
-    })
-    .compileComponents();
+      imports: [ReminderComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(ReminderComponent);
     component = fixture.componentInstance;

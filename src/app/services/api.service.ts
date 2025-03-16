@@ -1,18 +1,16 @@
 import { Injectable } from '@angular/core';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ApiService {
+  constructor() {}
 
-  constructor() { }
-
-
- post(data: any) {
+  post(data: any) {
     console.log(data);
- }
+  }
   get() {
-      return 'get';
+    return 'get';
   }
   put(data: any) {
     console.log(data);
@@ -20,7 +18,4 @@ export class ApiService {
   delete(id: string) {
     console.log(id);
   }
-
-
-
 }

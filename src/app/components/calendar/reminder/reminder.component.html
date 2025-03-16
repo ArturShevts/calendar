@@ -1,13 +1,26 @@
 <div class="reminders-container" *ngIf="reminders && reminders.length">
-  <div *ngFor="let r of reminders" (click)="openReminderForm(r.id, r.reminder)" class="reminder-item" >
-
-    <div  class="color-label" [style.backgroundColor]="r.reminder.color || 'grey'">
-
+  <div
+    *ngFor="let r of reminders"
+    (click)="openReminderForm(r.id, r.reminder)"
+    class="reminder-item"
+  >
+    <div
+      class="color-label"
+      [style.backgroundColor]="r.reminder.color || 'grey'"
+    ></div>
+    <div class="reminder-content" [title]="r.reminder.text">
+      <span class="reminder-time"
+        >{{ r.reminder.dateTime | date: 'shortTime' }}
+      </span>
+      {{ r.reminder.text }}
     </div>
-      <div class="reminder-content" [title]="r.reminder.text">       <span class="reminder-time">{{r.reminder.dateTime | date:'shortTime'}} </span>
-        {{r.reminder.text}}</div>
 
-    <div class="icon"><app-icon *ngIf="r.reminder?.weather?.icon" [iconData]="r.reminder.weather">  </app-icon>
+    <div class="icon">
+      <app-icon
+        *ngIf="r.reminder?.weather?.icon"
+        [iconData]="r.reminder.weather"
+      >
+      </app-icon>
     </div>
   </div>
 </div>
