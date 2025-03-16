@@ -1,14 +1,8 @@
-import {
-  FormControl,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { CalendarService } from '../../services/calendar.service';
 import { ReminderFormComponent } from './reminder-form.component';
-import { futureDateValidator } from '../../validators/date.validator';
-import { Cities, colors, Reminder } from '../../interfaces/reminder';
+import { Reminder } from '../../interfaces/reminder';
 import { mockReminder } from '../../mocks/reminder';
 
 describe('ReminderFormComponent', () => {
@@ -35,15 +29,9 @@ describe('ReminderFormComponent', () => {
       calendarServiceSpy,
       dialogData,
     );
-    component.reminderFormGroup = new FormGroup({
-      text: new FormControl('', Validators.required),
-      newTime: new FormControl(new Date(), {
-        validators: [Validators.required, futureDateValidator()],
-        updateOn: 'blur',
-      }),
-      city: new FormControl('', Validators.required),
-      color: new FormControl('', Validators.required),
-    });
+
+    // Let component initialize properly
+    component.ngOnInit();
   });
 
   it('should create', () => {
@@ -66,6 +54,7 @@ describe('ReminderFormComponent', () => {
       weather: 'Sunny',
     };
     component['setFormValues'](reminder);
+
     expect(component.textControl.value).toBe(reminder.text);
     expect(component.newTimeControl.value).toEqual(reminder.dateTime);
     expect(component.cityControl.value).toBe(reminder.city);
@@ -73,31 +62,61 @@ describe('ReminderFormComponent', () => {
   });
 
   it('should not submit invalid form', () => {
-    component.reminderFormGroup.markAsTouched();
+    component.textControl.setValue('');
+    component.reminderFormGroup.markAllAsTouched();
+
+    expect(component.reminderFormGroup.valid).toBeFalsy();
     component.onSubmit();
+
     expect(calendarServiceSpy.edit).not.toHaveBeenCalled();
     expect(calendarServiceSpy.create).not.toHaveBeenCalled();
     expect(dialogRefSpy.close).not.toHaveBeenCalled();
   });
 
   it('should submit valid form and create reminder', () => {
+    // Set a future date to pass validator
+    const futureDate = new Date();
+    futureDate.setDate(futureDate.getDate() + 1);
+
     component.textControl.setValue('Test Reminder');
-    component.newTimeControl.setValue(new Date());
-    component.cityControl.setValue('Test City');
-    component.colorControl.setValue('Test Color');
+    component.newTimeControl.setValue(futureDate);
+    component.cityControl.setValue('Kyoto');
+    component.colorControl.setValue('Red');
+
+    // Force validation
+    component.reminderFormGroup.updateValueAndValidity();
+
+    expect(component.reminderFormGroup.valid).toBeTruthy();
+
     component.onSubmit();
+
     expect(calendarServiceSpy.create).toHaveBeenCalled();
     expect(dialogRefSpy.close).toHaveBeenCalled();
   });
 
   it('should submit valid form and edit reminder', () => {
-    component.data.id = '123';
+    // Set a future date to pass validator
+    const futureDate = new Date();
+    futureDate.setDate(futureDate.getDate() + 1);
+
+    component.data.id = '1234';
     component.textControl.setValue('Test Reminder');
-    component.newTimeControl.setValue(new Date());
-    component.cityControl.setValue('Test City');
-    component.colorControl.setValue('Test Color');
+    component.newTimeControl.setValue(futureDate);
+    component.cityControl.setValue('Kyoto');
+    component.colorControl.setValue('Red');
+
+    // Force validation
+    component.reminderFormGroup.updateValueAndValidity();
+    expect(component.reminderFormGroup.valid).toBeTruthy();
+
     component.onSubmit();
+
     expect(calendarServiceSpy.edit).toHaveBeenCalled();
     expect(dialogRefSpy.close).toHaveBeenCalled();
+  });
+
+  it('should initialize text control with max length validator', () => {
+    component.textControl.setValue('a'.repeat(31));
+    expect(component.textControl.hasError('maxlength')).toBeTrue();
   });
 });

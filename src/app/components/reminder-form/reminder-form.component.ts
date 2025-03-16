@@ -31,7 +31,10 @@ export class ReminderFormComponent implements OnInit {
     private calendarService: CalendarService,
     @Inject(MAT_DIALOG_DATA) public data: { reminder: Reminder; id?: string },
   ) {
-    this.textControl = new FormControl('', Validators.required);
+    this.textControl = new FormControl('', [
+      Validators.required,
+      Validators.maxLength(30),
+    ]);
     this.newTimeControl = new FormControl(new Date(), {
       validators: [Validators.required, futureDateValidator()],
       updateOn: 'blur',
