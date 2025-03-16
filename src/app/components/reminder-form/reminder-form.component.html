@@ -25,75 +25,54 @@
           Text is required
         </mat-error>
       </mat-form-field>
-<!--      <mat-form-field appearance="outline" class="full-width">-->
-<!--        <mat-label>Date</mat-label>-->
-<!--        <input matInput [matDatepicker]="picker" formControlName="date" />-->
-<!--        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>-->
-<!--        <mat-datepicker #picker></mat-datepicker>-->
-<!--        <mat-error *ngIf="reminderFormGroup.get('date')?.hasError('required')">-->
-<!--          Date is required-->
-<!--        </mat-error>-->
-<!--      </mat-form-field>-->
-
-
+      <div class="inline-field-wrapper">
 
       <mat-form-field>
         <mat-label>Meeting date</mat-label>
-        <input matInput [matDatepicker]="datepicker" formControlName="newTime">
-        <mat-datepicker #datepicker/>
-        <mat-datepicker-toggle [for]="datepicker" matSuffix/>
+        <input
+          matInput
+          [matDatepicker]="datepicker"
+          formControlName="newTime"
+          onchange="handleInputChange()"
+         />
+        <mat-datepicker #datepicker />
+        <mat-datepicker-toggle [for]="datepicker" matSuffix />
       </mat-form-field>
 
-      <mat-form-field>
+      <mat-form-field >
         <mat-label>Meeting time</mat-label>
-        <input matInput
-               [matTimepicker]="timepicker"
-               formControlName="newTime"
-                 >
-        <mat-timepicker #timepicker/>
-        <mat-timepicker-toggle [for]="timepicker" matSuffix/>
+        <input
+          matInput
+          [matTimepicker]="timepicker"
+          formControlName="newTime"
+          [value]="newTimeControl.value"
+
+         />
+        <mat-timepicker #timepicker />
+        <mat-timepicker-toggle [for]="timepicker" matSuffix />
       </mat-form-field>
-
-
-
-
-<!--      <mat-form-field>-->
-<!--        <mat-label>Pick a time</mat-label>-->
-<!--        <input matInput formControlName="newTime"  [matTimepicker]="timePicker">-->
-<!--        <mat-timepicker-toggle matIconSuffix [for]="timePicker">-->
-<!--          <mat-icon matTimepickerToggleIcon>keyboard_arrow_down</mat-icon>-->
-<!--        </mat-timepicker-toggle>-->
-<!--        <mat-timepicker #timePicker/>-->
-<!--      </mat-form-field>-->
-
+      </div>
 
       <div class="inline-field-wrapper">
-<!--        <mat-form-field appearance="outline">-->
-<!--          <mat-label>Time</mat-label>-->
-<!--          <input matInput type="time" formControlName="time" step="60" />-->
-<!--          <mat-error-->
-<!--            *ngIf="reminderFormGroup.get('time')?.hasError('required')"-->
-<!--          >-->
-<!--            Time is required-->
-<!--          </mat-error>-->
-<!--        </mat-form-field>-->
-  <mat-radio-group
-  aria-labelledby="example-radio-group-label"
-  class="example-radio-group"
-  formControlName="color"
->
-  @for (color of colors; track color) {
-
-    <mat-radio-button class="example-radio-button" [value]="color"
-    ><div class="color" [ngStyle]="{'background-color': color.value}"></div
-    > </mat-radio-button>
-  }
-  <mat-error *ngIf="reminderFormGroup.get('color')?.hasError('required')">
-    Color is required
-  </mat-error>
-</mat-radio-group>
-
-
+        <mat-radio-group
+          aria-labelledby="example-radio-group-label"
+          class="example-radio-group"
+          formControlName="color"
+        >
+          @for (color of colors; track color) {
+            <mat-radio-button class="example-radio-button" [value]="color"
+              ><div
+                class="color"
+                [ngStyle]="{ 'background-color': color.value }"
+              ></div>
+            </mat-radio-button>
+          }
+          <mat-error
+            *ngIf="reminderFormGroup.get('color')?.hasError('required')"
+          >
+            Color is required
+          </mat-error>
+        </mat-radio-group>
       </div>
 
       <mat-form-field appearance="outline" class="full-width">

@@ -36,7 +36,7 @@ export class CalendarService {
     .asObservable()
     .pipe(startWith(mockReminders));
 
-  apiService = inject(WeatherService);
+  weatherService = inject(WeatherService);
 
   constructor() {}
 
@@ -62,13 +62,22 @@ export class CalendarService {
 
   public updateRemindersWeather() {
     let remindersMap = this.reminders.getValue();
-    // let updateObservables = [];
-    //
-    // for (let [key, value] of remindersMap.entries()) {
-    // }
-    //
-    // if (updateObservables.length > 0) {
-    //   forkJoin(updateObservables).subscribe((updatedReminders) => {});
-    // }
+    let updateObservables = [];
+
+    for (let [key, value] of remindersMap.entries()) {
+      if (value.weather) {
+        continue;
+      }
+      let $update = this.weatherService
+        .getWeatherInformation(value.city, value.dateTime)
+        .subscribe((data: any) => {
+          value.weather = data;
+        });
+      updateObservables.push($update);
+    }
+
+    if (updateObservables.length > 0) {
+      forkJoin(updateObservables).subscribe((updatedReminders) => {});
+    }
   }
 }

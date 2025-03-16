@@ -1,4 +1,10 @@
-import { Component, inject, Inject, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  Inject,
+  OnInit,
+} from '@angular/core';
 import {
   MAT_DIALOG_DATA,
   MatDialog,
@@ -13,46 +19,40 @@ import { CalendarService } from '../../services/calendar.service';
   templateUrl: './reminder-form.component.html',
   styleUrls: ['./reminder-form.component.scss'],
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ReminderFormComponent implements OnInit {
   private dialogRef = inject(MatDialogRef<ReminderFormComponent>);
-
   cities = Cities;
-
   calendarService = inject(CalendarService);
   constructor(
     @Inject(MAT_DIALOG_DATA)
     public data: { reminder: Reminder; id?: string },
   ) {}
 
-  reminderFormGroup?: FormGroup;
+  reminderFormGroup: FormGroup = new FormGroup({});
+  textControl = new FormControl('', Validators.required);
+  newTimeControl = new FormControl(new Date(), {
+    validators: [Validators.required],
+    updateOn: 'blur',
+  });
+  cityControl = new FormControl('', Validators.required);
+  colorControl = new FormControl('', Validators.required);
+
   ngOnInit(): void {
-    console.log(this.data);
     let reminder = this.data.reminder;
-    let date = reminder ? reminder.dateTime : new Date();
 
     if (reminder) {
-      this.reminderFormGroup = new FormGroup({
-        text: new FormControl(reminder.text, Validators.required),
-        // date: new FormControl(reminder.dateTime, Validators.required),
-        // time: new FormControl(reminder.dateTime, Validators.required),
-        newTime: new FormControl(
-          new Date(reminder.dateTime),
-          Validators.required,
-        ),
-        city: new FormControl(reminder.city),
-        color: new FormControl(reminder.color, Validators.required),
-      });
-    } else {
-      this.reminderFormGroup = new FormGroup({
-        text: new FormControl('', Validators.required),
-        // date: new FormControl(date, Validators.required),
-        // time: new FormControl(date.getTime(), Validators.required), // Not required for all day events
-        newTime: new FormControl(date.getTime(), Validators.required),
-        city: new FormControl('', Validators.required),
-        color: new FormControl('', Validators.required),
-      });
+      this.textControl.setValue(reminder.text);
+      this.newTimeControl.setValue(new Date(reminder.dateTime));
+      this.cityControl.setValue(reminder.city);
+      this.colorControl.setValue(reminder.color);
     }
+
+    this.reminderFormGroup.addControl('text', this.textControl);
+    this.reminderFormGroup.addControl('newTime', this.newTimeControl);
+    this.reminderFormGroup.addControl('city', this.cityControl);
+    this.reminderFormGroup.addControl('color', this.colorControl);
   }
 
   onSubmit() {
@@ -80,6 +80,8 @@ export class ReminderFormComponent implements OnInit {
     this.dialogRef.close();
     return;
   }
+
+  handleInputChange() {}
 
   protected readonly colors = colors;
 }
