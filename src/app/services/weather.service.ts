@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { City, Cities } from '../interfaces/reminder';
 import { API_KEY, ENDPOINT_URL } from '../app.config';
-import { catchError, map, of, take, tap, throwError } from 'rxjs';
+import { catchError, map, of, take, throwError } from 'rxjs';
 import { WeatherResponse } from '../interfaces/weather.model';
 
 @Injectable({
