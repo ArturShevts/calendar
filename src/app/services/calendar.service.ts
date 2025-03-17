@@ -8,10 +8,13 @@ import {
 import {
   BehaviorSubject,
   forkJoin,
+  map,
   Observable,
   of,
   startWith,
   Subject,
+  take,
+  tap,
 } from 'rxjs';
 import { Reminder } from '../interfaces/reminder';
 import { WeatherService } from './weather.service';
@@ -27,7 +30,7 @@ export interface Notification {
 @Injectable({
   providedIn: 'root',
 })
-export class CalendarService {
+export class CalendarService implements OnInit {
   private notification: Subject<Notification> = new Subject<Notification>();
   public $notification = this.notification.asObservable();
   private reminders: BehaviorSubject<ReminderMap> =
@@ -39,6 +42,7 @@ export class CalendarService {
   weatherService = inject(WeatherService);
 
   constructor() {}
+  ngOnInit() {}
 
   create(reminder: Reminder) {
     let remindersMap = this.reminders.getValue();
@@ -60,24 +64,33 @@ export class CalendarService {
     }
   }
 
-  public updateRemindersWeather() {
-    let remindersMap = this.reminders.getValue();
-    let updateObservables = [];
+  public updateRemindersWeather(remindersMap: ReminderMap) {
+    const weatherObservables: Observable<{ key: string; data: any }>[] = [];
 
-    for (let [key, value] of remindersMap.entries()) {
-      if (value.weather) {
-        continue;
+    for (const [key, reminder] of remindersMap.entries()) {
+      if (!reminder.weather) {
+        weatherObservables.push(
+          this.weatherService
+            .getWeatherInformation(reminder.city, reminder.dateTime)
+            .pipe(map((data) => ({ key, data }))),
+        );
       }
-      let $update = this.weatherService
-        .getWeatherInformation(value.city, value.dateTime)
-        .subscribe((data: any) => {
-          value.weather = data;
-        });
-      updateObservables.push($update);
     }
 
-    if (updateObservables.length > 0) {
-      forkJoin(updateObservables).subscribe((updatedReminders) => {});
-    }
+    if (weatherObservables.length === 0) return;
+
+    forkJoin(weatherObservables)
+      .pipe(take(1))
+      .subscribe((results) => {
+        results.forEach(({ key, data }) => {
+          const reminder = remindersMap.get(key);
+          if (reminder) {
+            reminder.weather = data;
+          }
+        });
+
+        // Since we are not using state, but rather a subscription to a pointer, there is no need to force updates, because the zoning will handle the updates without possibly triggering a data leak
+        // this.reminders.next(new Map(remindersMap));
+      });
   }
 }

@@ -82,6 +82,7 @@ export class CalendarComponent implements OnInit {
     this.calendarService.$reminders.pipe(
       tap((reminders) => {
         console.log('reminders', reminders);
+        this.calendarService.updateRemindersWeather(reminders);
       }),
     ),
   ]).pipe(
@@ -109,7 +110,7 @@ export class CalendarComponent implements OnInit {
   );
 
   ngOnInit(): void {
-    this.calendarService.updateRemindersWeather();
+    // this.calendarService.updateRemindersWeather();
   }
 
   openReminderForm(reminder?: Reminder) {

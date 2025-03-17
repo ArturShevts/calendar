@@ -29,7 +29,7 @@ export class ReminderFormComponent implements OnInit {
   constructor(
     private dialogRef: MatDialogRef<ReminderFormComponent>,
     private calendarService: CalendarService,
-    @Inject(MAT_DIALOG_DATA) public data: { reminder: Reminder; id?: string },
+    @Inject(MAT_DIALOG_DATA) public data: { reminder?: Reminder; id?: string },
   ) {
     this.textControl = new FormControl('', [
       Validators.required,
@@ -68,14 +68,21 @@ export class ReminderFormComponent implements OnInit {
       this.reminderFormGroup.markAllAsTouched();
       return;
     }
-
     const formData = this.reminderFormGroup.value;
+
+    const weather =
+      this.data.reminder?.city == formData.city &&
+      this.data.reminder?.dateTime?.toDateString() ==
+        formData.dateTime?.toDateString()
+        ? this.data.reminder?.weather
+        : undefined;
+
     const newReminder: Reminder = {
       text: formData.text,
       dateTime: formData.newTime,
       city: formData.city,
       color: formData.color,
-      weather: this.data.reminder?.weather,
+      weather: weather,
     };
 
     if (this.data.id) {

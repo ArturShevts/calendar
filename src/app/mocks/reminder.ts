@@ -34,14 +34,10 @@ export const mockReminders: ReminderMap = new Map(
       },
     } as Reminder,
     {
-      text: 'Gym session',
+      text: 'Test!',
       dateTime: new Date('2025-03-26T18:00:00'),
       color: 'yellow',
       city: 'Paris' as City,
-      weather: {
-        temp: 20,
-        icon: 'clear-day',
-      },
     } as Reminder,
   ].map((reminder, index) => [index.toString(), reminder]),
 );
