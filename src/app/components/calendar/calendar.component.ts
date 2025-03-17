@@ -1,8 +1,4 @@
-import {
-  Component,
-  inject,
-  OnInit,
-} from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import {
   BehaviorSubject,
   combineLatest,
@@ -13,36 +9,11 @@ import {
   tap,
 } from 'rxjs';
 import { Reminder } from '../../interfaces/reminder';
-import {
-  CalendarService,
-  Notification,
-} from '../../services/calendar.service';
+import { CalendarService, Notification } from '../../services/calendar.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ReminderFormComponent } from '../reminder-form/reminder-form.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
-
-export interface Day {
-  date: Date;
-  reminders: { id: string; reminder: Reminder }[];
-  weather: any;
-  display: boolean;
-  selected: boolean;
-  current: boolean;
-}
-export const MonthsMap = {
-  0: 'January',
-  1: 'February',
-  2: 'March',
-  3: 'April',
-  4: 'May',
-  5: 'June',
-  6: 'July',
-  7: 'August',
-  8: 'September',
-  9: 'October',
-  10: 'November',
-  11: 'December',
-};
+import { Day } from '../../interfaces/calendar';
 
 @Component({
   selector: 'app-calendar',
@@ -168,8 +139,7 @@ export class CalendarComponent implements OnInit {
           newDate.toISOString().split('T')[0] ===
           selectedDate.toISOString().split('T')[0],
         current:
-          newDate.toISOString().split('T')[0] ===
-          new Date().toISOString().split('T')[0],
+          newDate.toLocaleDateString() === new Date().toLocaleDateString(),
       };
 
       days.push(newDay);
