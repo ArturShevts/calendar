@@ -1,5 +1,4 @@
-import { FormGroup } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MatDialogRef } from '@angular/material/dialog';
 import { CalendarService } from '../../services/calendar.service';
 import { ReminderFormComponent } from './reminder-form.component';
 import { Reminder } from '../../interfaces/reminder';

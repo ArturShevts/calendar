@@ -2,19 +2,15 @@ import {
   inject,
   Injectable,
   OnInit,
-  signal,
-  WritableSignal,
 } from '@angular/core';
 import {
   BehaviorSubject,
   forkJoin,
   map,
   Observable,
-  of,
   startWith,
   Subject,
   take,
-  tap,
 } from 'rxjs';
 import { Reminder } from '../interfaces/reminder';
 import { WeatherService } from './weather.service';

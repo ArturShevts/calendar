@@ -1,33 +1,22 @@
 import {
-  ChangeDetectionStrategy,
   Component,
   inject,
-  OnDestroy,
   OnInit,
-  WritableSignal,
 } from '@angular/core';
 import {
   BehaviorSubject,
   combineLatest,
-  debounceTime,
   distinctUntilChanged,
-  forkJoin,
   map,
-  mergeMap,
   Observable,
-  share,
   startWith,
-  Subject,
   tap,
 } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
 import { Reminder } from '../../interfaces/reminder';
 import {
   CalendarService,
   Notification,
-  ReminderMap,
 } from '../../services/calendar.service';
-import { WeatherService } from '../../services/weather.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ReminderFormComponent } from '../reminder-form/reminder-form.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
