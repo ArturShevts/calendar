@@ -40,7 +40,7 @@ export class ReminderFormComponent implements OnInit {
       updateOn: 'blur',
     });
     this.cityControl = new FormControl('', Validators.required);
-    this.colorControl = new FormControl('', Validators.required);
+    this.colorControl = new FormControl('grey', Validators.required);
 
     this.reminderFormGroup = new FormGroup({
       text: this.textControl,
