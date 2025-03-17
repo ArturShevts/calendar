@@ -8,6 +8,10 @@ $secondary: #8e8e8e;
   flex: 1 1 auto;
 }
 
+mat-icon{
+  color:$accent;
+}
+
 .year-select {
   display: flex;
   justify-content: center;
