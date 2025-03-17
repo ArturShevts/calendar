@@ -1,19 +1,17 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { catchError, map, mergeMap, switchMap } from 'rxjs/operators';
 import { forkJoin, of } from 'rxjs';
-import { catchError, map, mergeMap, switchMap, take } from 'rxjs/operators';
 import { WeatherService } from '../../services/weather.service';
 import * as ReminderActions from './reminder.actions';
 
 @Injectable()
 export class ReminderEffects {
-  constructor(
-    private actions$: Actions,
-    private weatherService: WeatherService
-  ) {}
+  actions$ = inject(Actions);
+  weatherService = inject(WeatherService);
 
-  createReminder$ = createEffect(() =>
-    this.actions$.pipe(
+  createReminder$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(ReminderActions.createReminder),
       map(({ reminder }) => {
         const id = '_' + Math.random().toString(36);
@@ -22,55 +20,47 @@ export class ReminderEffects {
         });
       }),
       catchError((error) =>
-        of(
-          ReminderActions.createReminderFailure({ error: error.message }),
-          ReminderActions.showNotification({
-            notification: { body: 'Error creating reminder!', error: true },
-          })
-        )
-      )
-    )
-  );
+        of(ReminderActions.createReminderFailure({ error: error.message })),
+      ),
+    );
+  });
 
-  updateReminder$ = createEffect(() =>
-    this.actions$.pipe(
+  updateReminder$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(ReminderActions.updateReminder),
       map(({ id, reminder }) =>
-        ReminderActions.updateReminderSuccess({ id, reminder })
+        ReminderActions.updateReminderSuccess({ id, reminder }),
       ),
       catchError((error) =>
-        of(
-          ReminderActions.updateReminderFailure({ error: error.message }),
-          ReminderActions.showNotification({
-            notification: { body: 'Error editing reminder!', error: true },
-          })
-        )
-      )
-    )
-  );
+        of(ReminderActions.updateReminderFailure({ error: error.message })),
+      ),
+    );
+  });
 
-  updateWeather$ = createEffect(() =>
-    this.actions$.pipe(
+  updateWeather$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(ReminderActions.updateRemindersWeather),
       switchMap(({ reminders }) => {
-        if (reminders.length === 0) return of();
+        if (reminders.length === 0) {
+          // Return a "no-op" action instead of empty array
+          return of(ReminderActions.updateRemindersWeatherComplete());
+        }
 
         const weatherObservables = reminders.map(({ id, reminder }) =>
           this.weatherService
             .getWeatherInformation(reminder.city, reminder.dateTime)
-            .pipe(map((weather) => ({ id, weather })))
+            .pipe(map((weather) => ({ id, weather }))),
         );
 
         return forkJoin(weatherObservables).pipe(
-          take(1),
           mergeMap((results) =>
             results.map(({ id, weather }) =>
-              ReminderActions.updateReminderWeatherSuccess({ id, weather })
-            )
+              ReminderActions.updateReminderWeatherSuccess({ id, weather }),
+            ),
           ),
-          catchError(() => of())
+          catchError(() => of(ReminderActions.updateRemindersWeatherFailure())),
         );
-      })
-    )
-  );
+      }),
+    );
+  });
 }

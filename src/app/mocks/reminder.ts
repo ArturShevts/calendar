@@ -1,54 +1,69 @@
-import { ReminderMap } from '../services/calendar.service';
-import { City, Reminder } from '../interfaces/reminder';
+import { Reminder } from '../interfaces/reminder';
 
-export const mockReminders: ReminderMap = new Map(
+// Map<id, Reminder>
+export const mockReminders = new Map<string, Reminder>([
   [
+    'reminder1',
     {
-      text: 'Meeting with team',
-      dateTime: new Date('2025-03-04T10:00:00'),
+      id: 'reminder1',
+      text: 'Doctor Appointment',
+      dateTime: new Date(
+        new Date().getFullYear(),
+        new Date().getMonth(),
+        10,
+        9,
+        0,
+      ), // 10th of current month
       color: 'red',
-      city: 'Helsinki' as City,
-      weather: {
-        temp: -5,
-        icon: 'snow',
-      },
-    } as Reminder,
+      city: 'London',
+    },
+  ],
+  [
+    'reminder2',
     {
-      text: 'Doctor appointment',
-      dateTime: new Date('2025-03-04T15:00:00'),
+      id: 'reminder2',
+      text: 'Team Meeting',
+      dateTime: new Date(
+        new Date().getFullYear(),
+        new Date().getMonth(),
+        15,
+        14,
+        30,
+      ), // 15th of current month
       color: 'blue',
-      city: 'Kyoto',
-      weather: {
-        temp: 10,
-        icon: 'rain',
-      },
-    } as Reminder,
+      city: 'Paris',
+    },
+  ],
+  [
+    'reminder3',
     {
-      text: 'Lunch with friend',
-      dateTime: new Date('2025-03-26T12:00:00'),
+      id: 'reminder3',
+      text: 'Birthday Party',
+      dateTime: new Date(
+        new Date().getFullYear(),
+        new Date().getMonth(),
+        22,
+        18,
+        0,
+      ), // 22nd of current month
       color: 'green',
-      city: 'London' as City,
-      weather: {
-        temp: 15,
-        icon: 'partly-cloudy-day',
-      },
-    } as Reminder,
+      city: 'Helsinki',
+    },
+  ],
+  [
+    'reminder4',
     {
-      text: 'Test!',
-      dateTime: new Date('2025-03-26T18:00:00'),
+      id: 'reminder4',
+      text: 'Dentist Appointment',
+      dateTime: new Date(
+        new Date().getFullYear(),
+        new Date().getMonth() + 1,
+        5,
+        11,
+        0,
+      ), // 5th of next month
       color: 'yellow',
-      city: 'Paris' as City,
-    } as Reminder,
-  ].map((reminder, index) => [index.toString(), reminder]),
-);
-
-export const mockReminder: Reminder = {
-  text: 'Sample Reminder',
-  dateTime: new Date(),
-  color: 'blue',
-  city: 'Kyoto',
-  weather: {
-    temperature: 25,
-    condition: 'Sunny',
-  },
-};
+      city: 'Moscow',
+    },
+  ],
+]);

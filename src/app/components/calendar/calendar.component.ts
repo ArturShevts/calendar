@@ -30,34 +30,38 @@ export class CalendarComponent implements OnInit {
 
   public $vm: Observable<{
     days: Day[];
-    notification: Notification;
+    notification: Notification | null;
     selectedDate: Date;
   }> = combineLatest([
     // convert to selected month
     this.selectedDate.asObservable().pipe(distinctUntilChanged()),
     this.calendarService.$notification.pipe(
       startWith({ body: 'Welcome!', error: false }),
-      tap((notification) => this.openNotification(notification)),
+      tap((notification) => {
+        if (notification) {
+          this.openNotification(notification);
+        }
+      }),
     ),
     this.calendarService.$reminders.pipe(
       tap((reminders) => {
         console.log('reminders', reminders);
-        this.calendarService.updateRemindersWeather(reminders);
+        this.calendarService.updateRemindersWeather();
       }),
     ),
   ]).pipe(
     map(([selectedDate, notification, reminders]) => {
       const days = this.fillCalendar(selectedDate);
       for (const day of days) {
-        day.reminders = Array.from(reminders.entries()).reduce(
-          (acc, [id, reminder]) => {
-            if (reminder.dateTime.toDateString() === day.date.toDateString()) {
-              acc.push({ id, reminder });
-            }
-            return acc;
-          },
-          [] as { id: string; reminder: Reminder }[],
-        );
+        day.reminders = reminders
+          .filter(
+            (reminder) =>
+              reminder.dateTime.toDateString() === day.date.toDateString(),
+          )
+          .map((reminder) => ({
+            id: reminder.id,
+            reminder,
+          }));
       }
       console.log(days);
 
@@ -122,8 +126,6 @@ export class CalendarComponent implements OnInit {
     }
 
     for (let i = 0; i < totalDays; i++) {
-      // NOTE: small chance that feb 1st is a Sunday, in which case we only need to display 28 days but will ignore to support
-
       const newDate = new Date(
         firstDisplayDate.getFullYear(),
         firstDisplayDate.getMonth(),
@@ -144,7 +146,6 @@ export class CalendarComponent implements OnInit {
 
       days.push(newDay);
     }
-    days;
     return days;
   }
 

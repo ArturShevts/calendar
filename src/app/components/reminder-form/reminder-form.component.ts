@@ -77,7 +77,7 @@ export class ReminderFormComponent implements OnInit {
         ? this.data.reminder?.weather
         : undefined;
 
-    const newReminder: Reminder = {
+    const newReminder: Partial<Reminder> = {
       text: formData.text,
       dateTime: formData.newTime,
       city: formData.city,
@@ -86,9 +86,9 @@ export class ReminderFormComponent implements OnInit {
     };
 
     if (this.data.id) {
-      this.calendarService.edit(newReminder, this.data.id);
+      this.calendarService.edit(newReminder as Reminder, this.data.id);
     } else {
-      this.calendarService.create(newReminder);
+      this.calendarService.create(newReminder as Reminder);
     }
 
     this.reminderFormGroup.reset();

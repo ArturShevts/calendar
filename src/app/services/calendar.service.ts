@@ -1,22 +1,12 @@
-import {
-  inject,
-  Injectable,
-  OnInit,
-} from '@angular/core';
-import {
-  BehaviorSubject,
-  forkJoin,
-  map,
-  Observable,
-  startWith,
-  Subject,
-  take,
-} from 'rxjs';
+import { Injectable } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
 import { Reminder } from '../interfaces/reminder';
 import { WeatherService } from './weather.service';
 import { mockReminders } from '../mocks/reminder';
-
-export type ReminderMap = Map<string, Reminder>;
+import * as ReminderActions from '../store/reminder/reminder.actions';
+import * as ReminderSelectors from '../store/reminder/reminder.selectors';
+import { AppState } from '../store/app.state';
 
 export interface Notification {
   body: string;
@@ -26,67 +16,54 @@ export interface Notification {
 @Injectable({
   providedIn: 'root',
 })
-export class CalendarService implements OnInit {
-  private notification: Subject<Notification> = new Subject<Notification>();
-  public $notification = this.notification.asObservable();
-  private reminders: BehaviorSubject<ReminderMap> =
-    new BehaviorSubject<ReminderMap>(mockReminders); // new Map<string, Reminder>()
-  public $reminders = this.reminders
-    .asObservable()
-    .pipe(startWith(mockReminders));
+export class CalendarService {
+  $reminders: Observable<Reminder[]>;
+  $notification: Observable<Notification | null>;
 
-  weatherService = inject(WeatherService);
+  constructor(
+    private store: Store<AppState>,
+    private weatherService: WeatherService,
+  ) {
+    this.$reminders = this.store.select(ReminderSelectors.selectAllReminders);
+    this.$notification = this.store.select(
+      ReminderSelectors.selectNotification,
+    );
 
-  constructor() {}
-  ngOnInit() {}
+    // Initialize with mock reminders
+    const remindersArray = Array.from(mockReminders.entries()).map(
+      ([id, reminder]: [string, Reminder]) => ({
+        ...reminder,
+        id,
+      }),
+    );
+
+    this.store.dispatch(
+      ReminderActions.loadRemindersSuccess({ reminders: remindersArray }),
+    );
+  }
 
   create(reminder: Reminder) {
-    const remindersMap = this.reminders.getValue();
-
-    const id = '_' + Math.random().toString(36);
-    try {
-      this.reminders.next(remindersMap.set(id, reminder));
-    } catch (error) {
-      this.notification.next({ body: 'Error creating reminder!', error: true });
-    }
+    this.store.dispatch(ReminderActions.createReminder({ reminder }));
   }
 
   public edit(reminder: Reminder, id: string) {
-    const remindersMap = this.reminders.getValue();
-    try {
-      this.reminders.next(remindersMap.set(id, reminder));
-    } catch (error) {
-      this.notification.next({ body: 'Error editing reminder!', error: true });
-    }
+    this.store.dispatch(ReminderActions.updateReminder({ id, reminder }));
   }
 
-  public updateRemindersWeather(remindersMap: ReminderMap) {
-    const weatherObservables: Observable<{ key: string; data: any }>[] = [];
-
-    for (const [key, reminder] of remindersMap.entries()) {
-      if (!reminder.weather) {
-        weatherObservables.push(
-          this.weatherService
-            .getWeatherInformation(reminder.city, reminder.dateTime)
-            .pipe(map((data) => ({ key, data }))),
-        );
-      }
-    }
-
-    if (weatherObservables.length === 0) return;
-
-    forkJoin(weatherObservables)
-      .pipe(take(1))
-      .subscribe((results) => {
-        results.forEach(({ key, data }) => {
-          const reminder = remindersMap.get(key);
-          if (reminder) {
-            reminder.weather = data;
-          }
-        });
-
-        // Since we are not using state, but rather a subscription to a pointer, there is no need to force updates, because the zoning will handle the updates without possibly triggering a data leak
-        // this.reminders.next(new Map(remindersMap));
+  public updateRemindersWeather() {
+    this.store
+      .select(ReminderSelectors.selectRemindersWithoutWeather)
+      .subscribe((reminders) => {
+        if (reminders.length > 0) {
+          this.store.dispatch(
+            ReminderActions.updateRemindersWeather({
+              reminders: reminders.map((reminder) => ({
+                id: reminder.id,
+                reminder,
+              })),
+            }),
+          );
+        }
       });
   }
 }
