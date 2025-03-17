@@ -87,7 +87,7 @@ export class CalendarComponent implements OnInit {
     ),
   ]).pipe(
     map(([selectedDate, notification, reminders]) => {
-      let days = this.fillCalendar(selectedDate);
+      const days = this.fillCalendar(selectedDate);
       for (const day of days) {
         day.reminders = Array.from(reminders.entries()).reduce(
           (acc, [id, reminder]) => {
@@ -136,19 +136,19 @@ export class CalendarComponent implements OnInit {
   }
 
   public fillCalendar(selectedDate: Date) {
-    let firstDayMonth = new Date(
+    const firstDayMonth = new Date(
       selectedDate.getFullYear(),
       selectedDate.getMonth(),
       1,
     );
 
-    let firstDisplayDate = new Date(
+    const firstDisplayDate = new Date(
       selectedDate.getFullYear(),
       selectedDate.getMonth(),
       firstDayMonth.getDate() - firstDayMonth.getDay(),
     );
 
-    let days: Day[] = [];
+    const days: Day[] = [];
     const daysInMonth = new Date(
       selectedDate.getFullYear(),
       selectedDate.getMonth() + 1,
@@ -164,13 +164,13 @@ export class CalendarComponent implements OnInit {
     for (let i = 0; i < totalDays; i++) {
       // NOTE: small chance that feb 1st is a Sunday, in which case we only need to display 28 days but will ignore to support
 
-      let newDate = new Date(
+      const newDate = new Date(
         firstDisplayDate.getFullYear(),
         firstDisplayDate.getMonth(),
         firstDisplayDate.getDate() + i,
       );
 
-      let newDay: Day = {
+      const newDay: Day = {
         date: newDate,
         reminders: [],
         weather: {},

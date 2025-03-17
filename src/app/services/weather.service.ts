@@ -13,8 +13,8 @@ export class WeatherService {
   url = inject(ENDPOINT_URL);
   key = inject(API_KEY);
   getWeatherInformation(city: City, date: Date) {
-    let dateString = date.toISOString().split('T')[0];
-    let url =
+    const dateString = date.toISOString().split('T')[0];
+    const url =
       this.url +
       city +
       '/' +

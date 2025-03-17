@@ -45,9 +45,9 @@ export class CalendarService implements OnInit {
   ngOnInit() {}
 
   create(reminder: Reminder) {
-    let remindersMap = this.reminders.getValue();
+    const remindersMap = this.reminders.getValue();
 
-    let id = '_' + Math.random().toString(36);
+    const id = '_' + Math.random().toString(36);
     try {
       this.reminders.next(remindersMap.set(id, reminder));
     } catch (error) {
@@ -56,7 +56,7 @@ export class CalendarService implements OnInit {
   }
 
   public edit(reminder: Reminder, id: string) {
-    let remindersMap = this.reminders.getValue();
+    const remindersMap = this.reminders.getValue();
     try {
       this.reminders.next(remindersMap.set(id, reminder));
     } catch (error) {
